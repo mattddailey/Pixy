@@ -1,8 +1,8 @@
 from flask import Flask, redirect
 from flask_cors import CORS
 
-CLIENT_ID = "50812dc26802415491ccf6bc1772c000"
-CLIENT_SECRET = "d70f9b62f1d1482ca9a4d7194f2ba7e1"
+CLIENT_ID = ""
+CLIENT_SECRET = ""
 SPOTIFY_URL_AUTH = 'https://accounts.spotify.com/authorize/?'
 
 REDIRECT_URI = "http://localhost:5000/callback"
