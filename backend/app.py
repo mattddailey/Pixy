@@ -17,7 +17,7 @@ def index():
 
 @app.route('/callback')
 def callback():
-	return redirect('http://localhost:3000/')
+	return redirect('http://raspberrypi.local:3000/')
 
 if __name__ == '__main__':
 	app.run(debug=True, host='0.0.0.0')
