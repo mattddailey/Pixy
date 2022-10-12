@@ -1,18 +1,23 @@
 from flask import Flask, redirect
 from flask_cors import CORS
+import os
+from dotenv import load_dotenv
 
-CLIENT_ID = ""
-CLIENT_SECRET = ""
+load_dotenv()
+
+SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
+SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
+
 SPOTIFY_URL_AUTH = 'https://accounts.spotify.com/authorize/?'
 
-REDIRECT_URI = "http://localhost:5000/callback"
+CALLBACK_URL = "http://localhost:5000/callback"
 
 app = Flask(__name__)
 CORS(app)
 
 @app.route('/')
 def index():
-	data = "{}client_id={}&response_type=code&redirect_uri={}&scope={}".format(SPOTIFY_URL_AUTH, CLIENT_ID, REDIRECT_URI, "user-read-playback-state") 
+	data = "{}client_id={}&response_type=code&redirect_uri={}&scope={}".format(SPOTIFY_URL_AUTH, SPOTIFY_CLIENT_ID, CALLBACK_URL, "user-read-playback-state") 
 	return redirect(data)
 
 @app.route('/callback')
