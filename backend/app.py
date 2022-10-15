@@ -22,7 +22,6 @@ app.config.update(CELERY_CONFIG={
 CORS(app)
 celery = make_celery(app)
 
-
 @app.route('/image')
 def image():
 	return
