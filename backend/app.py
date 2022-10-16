@@ -1,4 +1,4 @@
-from make_celery import make_celery
+from celeryapp import make_celery
 from flask import Flask, redirect, request
 from flask_cors import CORS
 import os
@@ -38,20 +38,19 @@ def spotify_callback():
 	return redirect("{}:3000/".format(BASE_URL))
 	# return "Hello from dietpi"
 
-
-
-
-
-
 @app.route('/hello/<name>')
 def test(name):
 	hello.delay(name)
 	return "Request sent"
 
 
+
+
+
 @celery.task(name='celery_test_task')
 def hello(name):
 	return "hello " + name
+
 
 if __name__ == '__main__':
 	app.run(debug=True, host='0.0.0.0')
