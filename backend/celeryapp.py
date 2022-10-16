@@ -1,6 +1,7 @@
 from celery import Celery
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
-from PIL import image
+from PIL import Image
+import time
 
 def make_celery(app):
     celery = Celery(app.import_name)
@@ -30,3 +31,5 @@ def matrix_image():
     matrix.SetImage(image.convert('RGB'))
     
     time.sleep(5)
+
+    image.close()
