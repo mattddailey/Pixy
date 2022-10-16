@@ -24,7 +24,8 @@ celery = make_celery(app)
 
 @app.route('/image')
 def image():
-	return
+	display_image.delay()
+	return "Request sent"
 
 @app.route('/spotify-auth')
 def spotify_auth():
@@ -38,18 +39,9 @@ def spotify_callback():
 	return redirect("{}:3000/".format(BASE_URL))
 	# return "Hello from dietpi"
 
-@app.route('/hello/<name>')
-def test(name):
-	hello.delay(name)
-	return "Request sent"
-
-
-
-
-
-@celery.task(name='celery_test_task')
-def hello(name):
-	return "hello " + name
+@celery.task(name='display_image')
+def display_image():
+	return "hello "
 
 
 if __name__ == '__main__':
