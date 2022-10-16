@@ -1,5 +1,6 @@
 from celery import Celery
-from rgbmatrix import RGBMatrix
+from rgbmatrix import RGBMatrix, RGBMatrixOptions
+from PIL import image
 
 def make_celery(app):
     celery = Celery(app.import_name)
@@ -13,11 +14,19 @@ def make_celery(app):
     celery.Task = ContextTask
     return celery
 
-def matrix_text():
-    # Configuration for the matrix
+def matrix_image():
+    image = Image.open('/root/smiley.jpeg')
+
+    # Configure the matrix
     options = RGBMatrixOptions()
     options.rows = 64
-    options.columns = 64
-    options.hardware_mapping = 'adafruit-hat'
+    options.cols = 64
+    options.hardware_mapping = 'adafruit-hat-pwm'
 
     matrix = RGBMatrix(options = options)
+
+    image.thumbnail((matrix.width, matrix.height), Image.ANTIALIAS)
+
+    matrix.SetImage(image.convert('RGB'))
+    
+    time.sleep(5)

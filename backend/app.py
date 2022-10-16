@@ -1,4 +1,4 @@
-from celeryapp import make_celery
+from celeryapp import make_celery, matrix_image
 from flask import Flask, redirect, request
 from flask_cors import CORS
 import os
@@ -41,7 +41,7 @@ def spotify_callback():
 
 @celery.task(name='display_image')
 def display_image():
-	return "hello "
+	return matrix_image()
 
 
 if __name__ == '__main__':
