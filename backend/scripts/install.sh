@@ -1,5 +1,7 @@
 echo "$(tput setaf 4)Installing python dependencies...$(tput init)"
 
+cd ../ || exit
+
 sudo pip3 install -r backend/requirements.txt
 
 git submodule update --init --recursive
