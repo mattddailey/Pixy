@@ -1,4 +1,4 @@
-sudo pip3 install -r requirements.txt
+sudo pip3 install -r backend/requirements.txt
 
 git submodule update --init --recursive
 git config matrix.ignore all
@@ -14,6 +14,12 @@ cd ../../../ || exit
 
 make build-python PYTHON="$(command -v python3)"
 sudo make install-python PYTHON="$(command -v python3)"
+
+cd ../ || exit
+
+git reset --hard
+git fetch origin --prune
+git pull
 
 echo "$(tput setaf 4)Running Make...$(tput setaf 9)"
 
