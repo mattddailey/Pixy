@@ -1,3 +1,13 @@
+# Make script work regardless of where it is run from
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd "${DIR}/.." || exit
+
+echo "$(tput setaf 4)Installing react app dendencies...$(tput init)"
+
+cd frontend
+
+npm install
+
 echo "$(tput setaf 4)Installing python dependencies...$(tput init)"
 
 cd ../ || exit
