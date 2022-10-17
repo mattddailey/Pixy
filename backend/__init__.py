@@ -1,8 +1,10 @@
-from celeryapp import make_celery, matrix_image
+
+from celery import Celery
 from flask import Flask, redirect, request
 from flask_cors import CORS
 import os
 from dotenv import load_dotenv
+import tasks
 
 load_dotenv()
 BASE_URL = os.getenv('BASE_URL')
@@ -13,13 +15,24 @@ SPOTIFY_URL_AUTH = 'https://accounts.spotify.com/authorize/?'
 SPOTIFY_SCOPE = "user-read-playback-state" 
 CALLBACK_URL = "{}:5000/callback".format(BASE_URL)
 
-AUTHORIZATION_CODE = ""
-
 app = Flask(__name__)
 app.config.update(CELERY_CONFIG={
 	'broker_url': 'redis://localhost:6379'
 })
 CORS(app)
+
+def make_celery(app):
+    celery = Celery(app.import_name)
+    celery.conf.update(app.config["CELERY_CONFIG"])
+
+    class ContextTask(celery.Task):
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return self.run(*args, **kwargs)
+
+    celery.Task = ContextTask
+    return celery
+
 celery = make_celery(app)
 
 @app.route('/image')
@@ -38,11 +51,6 @@ def spotify_callback():
 	# Upon successful callback from Sptofify Authorization, redirect to the React App Homepage
 	return redirect("{}:3000/".format(BASE_URL))
 	# return "Hello from dietpi"
-
-@celery.task(name='display_image')
-def display_image():
-	return matrix_image()
-
 
 if __name__ == '__main__':
 	app.run(debug=True, host='0.0.0.0')
