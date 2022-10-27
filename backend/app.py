@@ -1,48 +1,38 @@
-from celeryapp import make_celery, matrix_image
-from flask import Flask, redirect, request
-from flask_cors import CORS
 import os
-from dotenv import load_dotenv
 
-load_dotenv()
-BASE_URL = os.getenv('BASE_URL')
-SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
-SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
+from flask import redirect, url_for, request
 
-SPOTIFY_URL_AUTH = 'https://accounts.spotify.com/authorize/?'
-SPOTIFY_SCOPE = "user-read-playback-state" 
-CALLBACK_URL = "{}:5000/callback".format(BASE_URL)
+from project import create_app, ext_celery, spotify_api, tasks
 
-AUTHORIZATION_CODE = ""
+app = create_app()
+celery = ext_celery.celery
 
-app = Flask(__name__)
-app.config.update(CELERY_CONFIG={
-	'broker_url': 'redis://localhost:6379'
-})
-CORS(app)
-celery = make_celery(app)
-
-@app.route('/image')
-def image():
-	display_image.delay()
-	return "Request sent"
-
-@app.route('/spotify-auth')
-def spotify_auth():
-	# Redirect Spotify Authorization URL
-	authURL = "{}client_id={}&response_type=code&redirect_uri={}&scope={}".format(SPOTIFY_URL_AUTH, SPOTIFY_CLIENT_ID, CALLBACK_URL, SPOTIFY_SCOPE) 
-	return redirect(authURL)
+@app.route('/')
+def index():
+	if spotify_api.authorization_code:
+		print("ALREADY HAVE AUTH CODE")
+		return redirect(url_for('callback'))
+	else:
+		print("FETCHING AUTH CODE")
+		auth_url = spotify_api.authorize_url()
+		return redirect(auth_url)
 
 @app.route('/callback')
-def spotify_callback():
-	# Upon successful callback from Sptofify Authorization, redirect to the React App Homepage
-	return redirect("{}:3000/".format(BASE_URL))
-	# return "Hello from dietpi"
+def callback():
+	code = request.args.get('code')
+	if code is not None:
+		spotify_api.authorization_code = code
+	return "test"
 
-@celery.task(name='display_image')
-def display_image():
-	return matrix_image()
+@app.route('/current_playing')
+def current_playing():
+	result = spotify_api.get_current_playing()
+	url = result['item']['album']['images'][0]['url']
+	return url
 
-
-if __name__ == '__main__':
-	app.run(debug=True, host='0.0.0.0')
+@app.route('/spotify_album')
+def spotify_album():
+	result = spotify_api.get_current_playing()
+	url = result['item']['album']['images'][0]['url']
+	tasks.display_spotify_album_art.delay(url, spotify_api.access_token, spotify_api.refresh_token, spotify_api.token_expire_timestamp)
+	return url

@@ -1,6 +1,4 @@
-celery
-flask
-flask-cors
+Flask-CeleryExt==0.3.4
 python-dotenv
-redis
+requests
 
