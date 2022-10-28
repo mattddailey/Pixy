@@ -43,7 +43,7 @@ class Spotify:
     url = "{}/?client_id={}&response_type={}&redirect_uri={}&scope={}".format(ACCOUNTS_BASE_URL + AUTHORIZE_ENDPOINT, self.__client_id, 'code', self.__callback_url, 'user-read-playback-state')
     return url
 
-  def __get_access_token(self):
+  def get_access_token(self):
     if (self.access_token is not None) and (self.token_expire_timestamp is not None):
       if time.time() < self.token_expire_timestamp:
         # access token already fetched, and not yet expired
@@ -66,7 +66,7 @@ class Spotify:
   def __handle_token_response(self, response):
     self.access_token = response["access_token"]
     self.token_expire_timestamp = time.time() + response["expires_in"]
-    self.refresh_token = response["refresh_token"]  
+    self.refresh_token = response["refresh_token"] 
     return self.access_token
   
   def __refresh_access_token(self):
@@ -90,14 +90,12 @@ class Spotify:
   # -------------------------- API CALLS --------------------------
 
   def get_current_playing(self):
-    print("I AM HERE")
-    print("Acces TOKEN: {}".format(self.access_token))
     get = requests.get(API_BASE_URL + CURRENT_PLAYING_ENDPOINT, headers=self.__api_headers)
     return json.loads(get.text)
 
   @property
   def __api_headers(self):
-    token = self.__get_access_token()
+    token = self.get_access_token()
     headers = {
       'Authorization': f'Bearer {token}',
     }

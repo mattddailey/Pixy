@@ -22,6 +22,7 @@ def callback():
 	code = request.args.get('code')
 	if code is not None:
 		spotify_api.authorization_code = code
+	spotify_api.get_access_token()
 	return "test"
 
 @app.route('/current_playing')
@@ -32,7 +33,5 @@ def current_playing():
 
 @app.route('/spotify_album')
 def spotify_album():
-	result = spotify_api.get_current_playing()
-	url = result['item']['album']['images'][0]['url']
-	tasks.display_spotify_album_art.delay(url, spotify_api.access_token, spotify_api.refresh_token, spotify_api.token_expire_timestamp)
-	return url
+	tasks.display_spotify_album_art.delay(spotify_api.access_token, spotify_api.refresh_token, spotify_api.token_expire_timestamp)
+	return "test"
