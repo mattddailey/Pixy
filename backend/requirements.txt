@@ -2,4 +2,4 @@ Flask-CeleryExt==0.3.4
 python-dotenv
 requests
 Redis
-
+Pillow

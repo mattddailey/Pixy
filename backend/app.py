@@ -2,7 +2,7 @@ import os
 
 from flask import redirect, url_for, request
 
-from project import create_app, ext_celery, spotify_api, tasks
+from project import create_app, ext_celery, spotify_api, tasks, matrix_tests
 
 app = create_app()
 celery = ext_celery.celery
@@ -31,7 +31,8 @@ def callback():
 def current_playing():
 	result = spotify_api.get_current_playing()
 	url = result['item']['album']['images'][0]['url']
-	return url
+	print('test')
+    return url
 
 @app.route('/spotify_album')
 def spotify_album():
