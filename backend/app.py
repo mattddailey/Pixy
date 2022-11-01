@@ -7,6 +7,8 @@ from project import create_app, ext_celery, spotify_api, tasks
 app = create_app()
 celery = ext_celery.celery
 
+current_task = None
+
 @app.route('/')
 def index():
 	if spotify_api.authorization_code:
@@ -33,5 +35,6 @@ def current_playing():
 
 @app.route('/spotify_album')
 def spotify_album():
-	tasks.display_spotify_album_art.delay(spotify_api.access_token, spotify_api.refresh_token, spotify_api.token_expire_timestamp)
-	return "test"
+	global current_task
+	current_task = tasks.display_spotify_album_art.delay(spotify_api.access_token, spotify_api.refresh_token, spotify_api.token_expire_timestamp)
+	return str(current_task)
