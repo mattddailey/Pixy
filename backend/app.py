@@ -31,8 +31,8 @@ def callback():
 def current_playing():
 	result = spotify_api.get_current_playing()
 	url = result['item']['album']['images'][0]['url']
-	print('test')
-    return url
+	matrix_tests.matrix_image(url)
+	return url
 
 @app.route('/spotify_album')
 def spotify_album():
