@@ -38,4 +38,4 @@ def current_playing():
 @app.route('/spotify')
 def spotify():
 	task_manager.start_task(type=TaskType.SPOTIFY)
-	return "Spotify Task Started"
+	return "", 204

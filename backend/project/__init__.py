@@ -9,7 +9,6 @@ from project.spotify import Spotify
 
 # instantiate the extensions
 ext_celery = FlaskCeleryExt(create_celery_app=make_celery) 
-# TO DO: Convert this to something celery can use?
 spotify_api = Spotify()
 
 def create_app(config_name=None):
