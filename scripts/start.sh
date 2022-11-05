@@ -6,16 +6,17 @@ echo "$(tput setaf 4)Starting react app...$(tput init)"
 
 cd frontend || exit
 
-npm start &
+# npm start &
 
 echo "$(tput setaf 4)Starting celery...$(tput init)"
 
 cd ../backend || exit
 
 
-redis-server &
+# redis-server &
+celery -A app.celery purge
 celery -A app.celery worker --loglevel=info -f celery.log  &
 
 echo "$(tput setaf 4)Starting flask server...$(tput init)"
 
-flask run --host 0.0.0.0
+flask run --host 0.0.0.0 &
