@@ -4,10 +4,12 @@ from flask import redirect, url_for, request
 
 from project import create_app, ext_celery, spotify_api, tasks
 from project.task_manager import TaskManager, TaskType
+from project.spotify import Spotify
 
 app = create_app()
 celery = ext_celery.celery
 task_manager = TaskManager()
+spotify_api = Spotify()
 
 current_task = None
 
@@ -29,13 +31,7 @@ def callback():
 	spotify_api.get_access_token()
 	return "test"
 
-@app.route('/current_playing')
-def current_playing():
-	result = spotify_api.get_current_playing()
-	url = result['item']['album']['images'][0]['url']
-	return url
-
 @app.route('/spotify')
 def spotify():
 	task_manager.start_task(type=TaskType.SPOTIFY)
-	return "Spotify Task Started"
+	return "", 204

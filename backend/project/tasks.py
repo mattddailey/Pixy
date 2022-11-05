@@ -9,7 +9,6 @@ from project.matrix_manager import MatrixManager
 def display_spotify_album_art(access_token, refresh_token, token_expire_timestamp):
 	spotify_api = Spotify(access_token=access_token, refresh_token=refresh_token, token_expire_timestamp=token_expire_timestamp)
 	matrix_manager = MatrixManager() 
-	
 
 	url_to_display = None
 	while True:
