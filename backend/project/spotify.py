@@ -90,8 +90,13 @@ class Spotify:
   # -------------------------- API CALLS --------------------------
 
   def get_current_playing(self):
-    get = requests.get(API_BASE_URL + CURRENT_PLAYING_ENDPOINT, headers=self.__api_headers)
-    return json.loads(get.text)
+    try:
+      get = requests.get(API_BASE_URL + CURRENT_PLAYING_ENDPOINT, headers=self.__api_headers)
+      result = json.loads(get.text)
+    except ValueError:
+      raise
+    finally:
+      return result
 
   @property
   def __api_headers(self):

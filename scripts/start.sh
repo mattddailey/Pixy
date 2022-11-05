@@ -14,7 +14,7 @@ cd ../backend || exit
 
 
 redis-server &
-celery -A app.celery worker --loglevel=info  &
+celery -A app.celery worker --loglevel=info -f celery.log  &
 
 echo "$(tput setaf 4)Starting flask server...$(tput init)"
 

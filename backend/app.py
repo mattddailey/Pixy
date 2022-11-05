@@ -1,23 +1,26 @@
 import os
+import logging
 
 from flask import redirect, url_for, request
 
 from project import create_app, ext_celery, spotify_api, tasks
 from project.task_manager import TaskManager, TaskType
 
+logging.basicConfig(filename='pixy-flask.log', 
+					level=logging.INFO, 
+					format='[%(asctime)s] %(levelname)s  : %(message)s')
+
 app = create_app()
 celery = ext_celery.celery
 task_manager = TaskManager()
 
-current_task = None
-
 @app.route('/')
 def index():
 	if spotify_api.authorization_code:
-		print("ALREADY HAVE AUTH CODE")
+		app.logger.info("Already have an auth code")
 		return redirect(url_for('callback'))
 	else:
-		print("FETCHING AUTH CODE")
+		app.logger.info("Fetching a auth code")
 		auth_url = spotify_api.authorize_url()
 		return redirect(auth_url)
 
@@ -28,12 +31,6 @@ def callback():
 		spotify_api.authorization_code = code
 	spotify_api.get_access_token()
 	return "test"
-
-@app.route('/current_playing')
-def current_playing():
-	result = spotify_api.get_current_playing()
-	url = result['item']['album']['images'][0]['url']
-	return url
 
 @app.route('/spotify')
 def spotify():
