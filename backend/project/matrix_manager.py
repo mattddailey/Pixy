@@ -1,11 +1,8 @@
-import tempfile
-import time
-
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
-
 from PIL import Image
+import time
 import requests
-
+import tempfile
 
 class MatrixManager:
 	__rows = 64
@@ -34,3 +31,14 @@ class MatrixManager:
 		image.thumbnail((self.__matrix.width, self.__matrix.height), Image.ANTIALIAS)
 
 		self.__matrix.SetImage(image.convert('RGB'))
+
+
+def matrix_image(image_url):
+	matrix_manager = MatrixManager()
+
+	matrix_manager.display_image(image_url)
+	
+	time.sleep(5)
+
+if __name__ == "__main__":
+    matrix_image('https://i.scdn.co/image/ab67616d0000b27336adb8a0c812b3f6df627b58')
