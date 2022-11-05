@@ -8,7 +8,7 @@ from celery.utils.log import get_task_logger
 from project.spotify import Spotify
 from project.matrix_manager import MatrixManager
 
-logger = get_task_logger(__name__)
+# logger = get_task_logger(__name__)
 
 @shared_task
 def display_spotify_album_art(access_token, refresh_token, token_expire_timestamp):
@@ -21,22 +21,24 @@ def display_spotify_album_art(access_token, refresh_token, token_expire_timestam
 		try:
 			current_playing = spotify_api.get_current_playing()
 			image_url = current_playing['item']['album']['images'][0]['url']
-		except requests.exceptions.RequestException:
-			logger.exception("Error during request to spotify api")
-		except ValueError:
-			logger.exception("Error decoding json response from spotify api")
-		except TypeError:
-			logger.exception("Error finding 'url' component in response from spotify api")
+		# except requests.exceptions.RequestException:
+		# 	logger.exception("Error during request to spotify api")
+		# except ValueError:
+		# 	logger.exception("Error decoding json response from spotify api")
+		# except TypeError:
+		# 	logger.exception("Error finding 'url' component in response from spotify api")
 		except:
-			logger.exception("Some other error occured while trying to use spotify api")
+			# logger.exception("Some other error occured while trying to use spotify api")
+			continue
 		finally:
 			if image_url != url_to_display:
 				url_to_display = image_url
-				/matrix_manager.display_image(url_to_display)
-				logger.info("SPOTIFY task displaying new image")
+				matrix_manager.display_image(url_to_display)
+				# logger.info("SPOTIFY task displaying new image")
 			elif url_to_display != None:
-				logger.info("SPOTIFY task displaying same image")
-			time.sleep(1)
+				# logger.info("SPOTIFY task displaying same image")
+				continue
+		time.sleep(1)
 
 		
 		
