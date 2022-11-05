@@ -16,12 +16,15 @@ class TaskManager:
     return 
 
   def start_task(self, type=TaskType):
-    if self.__current_task is not None:
-      self.__current_task.revoke(terminate=True)
-      self.__current_task = None
+    self.revoke()
 
     if type is TaskType.SPOTIFY:
       self.__start_spotify()
+
+  def revoke(self):
+    if self.__current_task is not None:
+      self.__current_task.revoke(terminate=True)
+      self.__current_task = None
 
   def __start_spotify(self):
     logging.info("Starting Spotify Task")
