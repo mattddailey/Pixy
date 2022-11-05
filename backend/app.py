@@ -36,3 +36,8 @@ def callback():
 def spotify():
 	task_manager.start_task(type=TaskType.SPOTIFY)
 	return "", 204
+
+@app.route('/revoke')
+def revoke():
+	task_manager.revoke()
+	return "", 204
