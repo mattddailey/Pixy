@@ -3,11 +3,12 @@ import logging
 import requests
 
 from celery import shared_task
+from celery.utils.log import get_task_logger
 
 from project.spotify import Spotify
 from project.matrix_manager import MatrixManager
 
-logger = logging.getLogger(__name__)
+logger = get_task_logger(__name__)
 
 @shared_task
 def display_spotify_album_art(access_token, refresh_token, token_expire_timestamp):
@@ -31,7 +32,7 @@ def display_spotify_album_art(access_token, refresh_token, token_expire_timestam
 		finally:
 			if image_url != url_to_display:
 				url_to_display = image_url
-				matrix_manager.display_image(url_to_display)
+				/matrix_manager.display_image(url_to_display)
 				logger.info("SPOTIFY task displaying new image")
 			elif url_to_display != None:
 				logger.info("SPOTIFY task displaying same image")
