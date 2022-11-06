@@ -23,6 +23,7 @@ class TaskManager:
 
   def revoke(self):
     if self.__current_task is not None:
+      logging.info("Revoking current task")
       self.__current_task.revoke(terminate=True)
       self.__current_task = None
 

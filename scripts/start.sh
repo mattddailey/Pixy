@@ -12,9 +12,9 @@ echo "$(tput setaf 4)Starting celery...$(tput init)"
 
 cd ../backend || exit
 
-
-# redis-server &
+redis-server &
 celery -A app.celery purge
+ps auxww | grep 'celery worker' | awk '{print $2}' | xargs kill -9
 celery -A app.celery worker --loglevel=info -f celery.log  &
 
 echo "$(tput setaf 4)Starting flask server...$(tput init)"
