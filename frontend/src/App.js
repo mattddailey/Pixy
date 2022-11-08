@@ -1,14 +1,30 @@
-import logo from './logo.svg';
 import './App.css';
+import {MainAppBar} from './Components/AppBar'
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import { useState } from 'react';
 
 function App() {
+
+  // current mode state
+  
+  // login state
+
+  // tab state
+  const [tabIndex, setTabIndex] = useState(0);
+  const handleTabChange = (_, newTabIndex) => {
+    setTabIndex(newTabIndex);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <button onClick={spotify}>Spotify Album</button>
-        <button onClick={revoke}>Turn Off</button>
-      </header>
-    </div>
+    <Box>
+      <MainAppBar setTabIndex={handleTabChange} tabIndex={tabIndex} ></MainAppBar>
+      <Box sx={{ padding: 2 }}>
+        {tabIndex === 0 && (
+            <Button variant="contained" color="success" fullWidth={true}>Enable</Button>
+        )}
+      </Box>
+    </Box>
   );
 }
 
