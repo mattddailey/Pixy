@@ -5,21 +5,29 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <button onClick={spotify}>Spotify Album</button>
+        <button onClick={revoke}>Turn Off</button>
       </header>
     </div>
   );
+}
+
+function spotify() {
+  alert('Starting spotify');
+  fetch('http://localhost:5000/spotify', { method: 'GET' })
+    .then((response) => {
+      if(!response.ok) throw new Error(response.status);
+      else console.log("Spotify call success")
+    })
+}
+
+function revoke() {
+  alert('Turning off');
+  fetch('http://localhost:5000/revoke', { method: 'GET' })
+    .then((response) => {
+      if(!response.ok) throw new Error(response.status);
+      else console.log("revoke success")
+    })
 }
 
 export default App;

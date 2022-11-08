@@ -30,7 +30,7 @@ def callback():
 	if code is not None:
 		spotify_api.authorization_code = code
 	spotify_api.get_access_token()
-	return "test"
+	return redirect('localhost:3000')
 
 @app.route('/spotify')
 def spotify():
