@@ -1,14 +1,19 @@
 import './App.css';
-import {MainAppBar} from './Components/AppBar'
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import {MainAppBar} from './Components/AppBar'
+import {PixyMode} from './Model/PixyMode'
+import {SpotifyTab} from './Pages/SpotifyTab'
+import FlaskService from './Services/FlaskService'
 
 function App() {
 
   // current mode state
-  
-  // login state
+  // TODO: use enum?
+  const [currentMode, setCurrentMode] = useState(PixyMode.OFF);
+
+  // spotify state
+  const [isSpotifyAuthorized, setIsSpotifyAuthorized] = useState(false);
 
   // tab state
   const [tabIndex, setTabIndex] = useState(0);
@@ -16,34 +21,28 @@ function App() {
     setTabIndex(newTabIndex);
   };
 
+  useEffect(() => {
+    FlaskService.getIsSpotifyAuthorized()
+    .then((res) => {
+      setIsSpotifyAuthorized(res.isLoggedIn === 'true');
+    });
+    FlaskService.getCurrentMode()
+    .then((res) => {
+      console.log("Current mode: " + res.currentMode)
+      setCurrentMode(res.currentMode)
+    });
+  }, []);
+
   return (
     <Box>
-      <MainAppBar setTabIndex={handleTabChange} tabIndex={tabIndex} ></MainAppBar>
+      <MainAppBar currentMode={currentMode} setCurrentMode={setCurrentMode} setTabIndex={handleTabChange} tabIndex={tabIndex} ></MainAppBar>
       <Box sx={{ padding: 2 }}>
         {tabIndex === 0 && (
-            <Button variant="contained" color="success" fullWidth={true}>Enable</Button>
+          <SpotifyTab currentMode={currentMode} setCurrentMode={setCurrentMode}></SpotifyTab>
         )}
       </Box>
     </Box>
   );
-}
-
-function spotify() {
-  alert('Starting spotify');
-  fetch('http://localhost:5000/spotify', { method: 'GET' })
-    .then((response) => {
-      if(!response.ok) throw new Error(response.status);
-      else console.log("Spotify call success")
-    })
-}
-
-function revoke() {
-  alert('Turning off');
-  fetch('http://localhost:5000/revoke', { method: 'GET' })
-    .then((response) => {
-      if(!response.ok) throw new Error(response.status);
-      else console.log("revoke success")
-    })
 }
 
 export default App;

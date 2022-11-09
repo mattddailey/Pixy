@@ -2,6 +2,7 @@ import os
 import logging
 
 from flask import redirect, url_for, request
+from flask_cors import CORS
 
 from project import create_app, ext_celery, spotify_api, tasks
 from project.task_manager import TaskManager, TaskType
@@ -11,6 +12,7 @@ logging.basicConfig(filename='pixy-flask.log',
 					format='[%(asctime)s] %(levelname)s  : %(message)s')
 
 app = create_app()
+CORS(app)
 celery = ext_celery.celery
 task_manager = TaskManager()
 
@@ -31,6 +33,17 @@ def callback():
 		spotify_api.authorization_code = code
 	spotify_api.get_access_token()
 	return redirect('localhost:3000')
+
+@app.route('/currentMode')
+def getCurrentMode():
+	if task_manager.current_task is not None:
+		return { 'currentMode' :  task_manager.current_task }
+	else:
+		return { 'currentMode' : 'off' }
+
+@app.route('/isLoggedIn')
+def isLoggedIn():
+	return { 'isLoggedIn': 'true' }
 
 @app.route('/spotify')
 def spotify():
