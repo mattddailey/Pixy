@@ -36,8 +36,8 @@ def callback():
 
 @app.route('/currentMode')
 def getCurrentMode():
-	if task_manager.current_task is not None:
-		return { 'currentMode' :  task_manager.current_task.value }
+	if task_manager.current_task_type is not None:
+		return { 'currentMode' :  task_manager.current_task_type.value }
 	else:
 		return { 'currentMode' : 'Off' }
 
