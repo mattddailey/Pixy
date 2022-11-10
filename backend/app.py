@@ -1,5 +1,5 @@
+import dotenv
 import os
-import logging
 
 from flask import redirect, url_for, request
 from flask_cors import CORS
@@ -7,22 +7,21 @@ from flask_cors import CORS
 from project import create_app, ext_celery, spotify_api, tasks
 from project.task_manager import TaskManager, TaskType
 
-logging.basicConfig(filename='pixy-flask.log', 
-					level=logging.INFO, 
-					format='[%(asctime)s] %(levelname)s  : %(message)s')
-
 app = create_app()
 CORS(app)
 celery = ext_celery.celery
 task_manager = TaskManager()
 
+dotenv.load_dotenv()
+REDIRECT_URL = os.getenv("BASE_URL") + ":3000"
+
 @app.route('/')
 def index():
 	if spotify_api.authorization_code:
-		app.logger.info("Already have an auth code")
+		print("Already have an auth code")
 		return redirect(url_for('callback'))
 	else:
-		app.logger.info("Fetching a auth code")
+		print("Fetching a auth code")
 		auth_url = spotify_api.authorize_url()
 		return redirect(auth_url)
 
@@ -32,7 +31,7 @@ def callback():
 	if code is not None:
 		spotify_api.authorization_code = code
 	spotify_api.get_access_token()
-	return redirect('localhost:3000')
+	return redirect(REDIRECT_URL)
 
 @app.route('/currentMode')
 def getCurrentMode():

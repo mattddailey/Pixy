@@ -1,0 +1,32 @@
+services:
+  redis:
+    image: redis:bullseye
+  celery:
+    build: .
+    environment:
+      BASE_URL: ${BASE_URL}
+      CELERY_BROKER: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+      SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID}
+      SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET}
+    volumes:
+    - ./backend:/backend
+    command: celery -A app.celery worker --loglevel=info
+    depends_on:
+      - redis
+  flask:
+    build: .
+    environment:
+      BASE_URL: ${BASE_URL}
+      FLASK_APP: app.py
+      FLASK_ENV: development
+      FLASK_DEBUG: true
+      SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID}
+      SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET}
+    volumes:
+    - ../backend:/backend
+    command: flask run --host 0.0.0.0
+    ports: 
+      - 5000:5000
+    depends_on:
+      - celery
