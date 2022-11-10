@@ -24,6 +24,7 @@ function App() {
   useEffect(() => {
     FlaskService.getIsSpotifyAuthorized()
     .then((res) => {
+      console.log(res.isLoggedIn)
       setIsSpotifyAuthorized(res.isLoggedIn === 'true');
     });
     FlaskService.getCurrentMode()
