@@ -3,4 +3,3 @@ flask_cors
 python-dotenv
 requests
 Redis
-Pillow
