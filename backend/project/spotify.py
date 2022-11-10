@@ -22,8 +22,8 @@ class Spotify:
 
   # auth objects
   access_token = None
-  authorization_code = ''
-  refresh_token = ''
+  authorization_code = None
+  refresh_token = None
   token_expire_timestamp = None
 
   # -------------------------- LIFECYCLE -------------------------- 

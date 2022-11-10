@@ -37,13 +37,14 @@ def callback():
 @app.route('/currentMode')
 def getCurrentMode():
 	if task_manager.current_task is not None:
-		return { 'currentMode' :  task_manager.current_task }
+		return { 'currentMode' :  task_manager.current_task.value }
 	else:
-		return { 'currentMode' : 'off' }
+		return { 'currentMode' : 'Off' }
 
 @app.route('/isLoggedIn')
 def isLoggedIn():
-	return { 'isLoggedIn': 'true' }
+	isLoggedIn = (spotify_api.authorization_code is not None) and (spotify_api.access_token is not None) and (spotify_api.refresh_token is not None)
+	return { 'isLoggedIn': str(isLoggedIn) }
 
 @app.route('/spotify')
 def spotify():
