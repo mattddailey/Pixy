@@ -95,6 +95,8 @@ class Spotify:
       result = json.loads(get.text)
     except ValueError:
       raise
+    except UnboundLocalError:
+      print("Unbounb local error")
     finally:
       return result
 
