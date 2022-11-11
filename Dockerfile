@@ -10,6 +10,6 @@ RUN $(which python3) -m pip install Pillow \
     && git clone https://github.com/hzeller/rpi-rgb-led-matrix.git \
     && cd rpi-rgb-led-matrix \
     && make build-python PYTHON=$(which python3) \
-    && make install-python PYTHON=$(which python3) 
+    && make install-python PYTHON=$(which python3)
 
 WORKDIR /backend
