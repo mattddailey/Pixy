@@ -3,7 +3,7 @@ services:
     image: redis:bullseye
   celery:
     build: .
-    user: root
+    privileged: true
     environment:
       BASE_URL: ${BASE_URL}
       CELERY_BROKER: redis://redis:6379/0
@@ -17,7 +17,6 @@ services:
       - redis
   flask:
     build: .
-    user: root
     environment:
       BASE_URL: ${BASE_URL}
       FLASK_APP: app.py
