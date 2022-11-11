@@ -46,11 +46,9 @@ class Spotify:
   def get_access_token(self):
     if (self.access_token is not None) and (self.token_expire_timestamp is not None):
       if time.time() < self.token_expire_timestamp:
-        # access token already fetched, and not yet expired
         print("Already have a valid access token, no need to fetch new one")
         return self.access_token
       else:
-        # access token fetched, but expired
         print("Access token expired. Refreshing now...")
         return self.__refresh_access_token()
     
@@ -97,13 +95,8 @@ class Spotify:
   # -------------------------- API CALLS --------------------------
 
   def get_current_playing(self):
-    try:
       get = requests.get(API_BASE_URL + CURRENT_PLAYING_ENDPOINT, headers=self.__api_headers)
-      result = json.loads(get.text)
-    except:
-      raise
-    finally:
-      return result
+      return json.loads(get.text)
 
   @property
   def __api_headers(self):

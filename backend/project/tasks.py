@@ -22,11 +22,13 @@ def display_spotify_album_art(self, access_token, refresh_token, token_expire_ti
 			current_playing = spotify_api.get_current_playing()
 			image_url = current_playing['item']['album']['images'][0]['url']
 		except requests.exceptions.RequestException:
-			print("Some other error occured while trying to use spotify api")
+			print("Error using requests library to communicate with spotify api")
 			pass
 		except ValueError:
 			print("Caught a request while decoding json")
 			pass
+		except: 
+			print("Some other error occured")
 		finally:
 			if image_url != url_to_display:
 				url_to_display = image_url
