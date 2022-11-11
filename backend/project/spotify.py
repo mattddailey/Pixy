@@ -66,7 +66,6 @@ class Spotify:
   def __handle_token_response(self, response):
     self.access_token = response["access_token"]
     self.token_expire_timestamp = time.time() + response["expires_in"]
-    self.refresh_token = response["refresh_token"] 
     return self.access_token
   
   def __refresh_access_token(self):
