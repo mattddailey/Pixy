@@ -3,8 +3,6 @@ FROM ubuntu:20.04
 RUN apt-get update && apt-get install -y git make build-essential python3 python3-pip python3-distutils python3-dev libjpeg-dev zlib1g-dev
 RUN pip install --upgrade pip
 
-RUN $(which python3) -m pip install Pillow 
-
 COPY backend/requirements.txt .
 RUN pip install -r requirements.txt
 
