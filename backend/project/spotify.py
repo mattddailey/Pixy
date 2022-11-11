@@ -47,9 +47,11 @@ class Spotify:
     if (self.access_token is not None) and (self.token_expire_timestamp is not None):
       if time.time() < self.token_expire_timestamp:
         # access token already fetched, and not yet expired
+        print("Already have a valid access token, no need to fetch new one")
         return self.access_token
       else:
         # access token fetched, but expired
+        print("Access token expired. Refreshing now...")
         return self.__refresh_access_token()
     
     # fetching access token for the first time
@@ -64,8 +66,14 @@ class Spotify:
     return self.__handle_token_response(json.loads(post.text))
 
   def __handle_token_response(self, response):
+    print("Received token response. Setting spotify class values")
     self.access_token = response["access_token"]
     self.token_expire_timestamp = time.time() + response["expires_in"]
+    try:
+      self.refresh_token = response["refresh_token"]
+    except:
+      print("No refresh_token in the token response received")
+    
     return self.access_token
   
   def __refresh_access_token(self):
@@ -92,7 +100,7 @@ class Spotify:
     try:
       get = requests.get(API_BASE_URL + CURRENT_PLAYING_ENDPOINT, headers=self.__api_headers)
       result = json.loads(get.text)
-    except ValueError:
+    except:
       raise
     finally:
       return result
