@@ -44,6 +44,9 @@ class Spotify:
     return url
 
   def get_access_token(self):
+    print("IN GET_ACCESS_TOKEN: access token: {}".format(self.access_token))
+    print("IN GET_ACCESS_TOKEN: token expire timestamp: {}".format(self.token_expire_timestamp))
+    print("IN GET_ACCESS_TOKEN: time.time(): {}".format(time.time()))
     if (self.access_token is not None) and (self.token_expire_timestamp is not None):
       if time.time() < self.token_expire_timestamp:
         print("Already have a valid access token, no need to fetch new one")
@@ -65,6 +68,9 @@ class Spotify:
 
   def __handle_token_response(self, response):
     print("Received token response. Setting spotify class values")
+    print("access token: {}".format(response["access_token"]))
+    print("expires in: {}".format(response["expires_in"]))
+    print("new expire timestamp: {}(".format(time.time() + response["expires_in"]))
     self.access_token = response["access_token"]
     self.token_expire_timestamp = time.time() + response["expires_in"]
     try:
