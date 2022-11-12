@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-    baseURL: "http://10.0.0.198:5000",
+    baseURL: process.env.REACT_APP_BASE_URL + ":5000",
 })
 
 const FlaskService = {

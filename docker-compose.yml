@@ -2,7 +2,8 @@ services:
   redis:
     image: redis:bullseye
   celery:
-    build: .
+    build:
+      dockerfile: python.Dockerfile
     privileged: true
     environment:
       BASE_URL: ${BASE_URL}
@@ -16,7 +17,8 @@ services:
     depends_on:
       - redis
   flask:
-    build: .
+    build:
+      dockerfile: python.Dockerfile
     environment:
       BASE_URL: ${BASE_URL}
       FLASK_APP: app.py
@@ -31,3 +33,14 @@ services:
       - 5000:5000
     depends_on:
       - celery
+  react:
+    build:
+      dockerfile: react.Dockerfile
+    environment:
+      REACT_APP_BASE_URL: ${BASE_URL}
+    volumes:
+    - ./frontend:/frontend
+    command: npm start
+    ports: 
+    - 3000:3000
+    
