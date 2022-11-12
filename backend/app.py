@@ -1,6 +1,5 @@
 import dotenv
 import os
-import logging
 
 from flask import redirect, url_for, request
 from flask_cors import CORS
@@ -10,7 +9,6 @@ from project.task_manager import TaskManager, TaskType
 
 app = create_app()
 CORS(app)
-app.logger.setLevel(logging.DEBUG)
 
 celery = ext_celery.celery
 task_manager = TaskManager()
