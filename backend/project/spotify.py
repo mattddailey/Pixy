@@ -1,4 +1,5 @@
 import base64
+import logging
 import json
 import os
 import time
@@ -44,15 +45,12 @@ class Spotify:
     return url
 
   def get_access_token(self):
-    print("IN GET_ACCESS_TOKEN: access token: {}".format(self.access_token))
-    print("IN GET_ACCESS_TOKEN: token expire timestamp: {}".format(self.token_expire_timestamp))
-    print("IN GET_ACCESS_TOKEN: time.time(): {}".format(time.time()))
     if (self.access_token is not None) and (self.token_expire_timestamp is not None):
       if time.time() < self.token_expire_timestamp:
-        print("Already have a valid access token, no need to fetch new one")
+        logging.debug("Already have a valid access token, no need to fetch new one")
         return self.access_token
       else:
-        print("Access token expired. Refreshing now...")
+        logging.debug("Access token expired. Refreshing now...")
         return self.__refresh_access_token()
     
     # fetching access token for the first time
@@ -67,16 +65,13 @@ class Spotify:
     return self.__handle_token_response(json.loads(post.text))
 
   def __handle_token_response(self, response):
-    print("Received token response. Setting spotify class values")
-    print("access token: {}".format(response["access_token"]))
-    print("expires in: {}".format(response["expires_in"]))
-    print("new expire timestamp: {}(".format(time.time() + response["expires_in"]))
+    logging.debug("Received token response. Setting spotify class values")
     self.access_token = response["access_token"]
     self.token_expire_timestamp = time.time() + response["expires_in"]
     try:
       self.refresh_token = response["refresh_token"]
     except:
-      print("No refresh_token in the token response received")
+      logging.exception("No refresh_token in the token response received")
     
     return self.access_token
   

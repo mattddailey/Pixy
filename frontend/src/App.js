@@ -9,7 +9,6 @@ import FlaskService from './Services/FlaskService'
 function App() {
 
   // current mode state
-  // TODO: use enum?
   const [currentMode, setCurrentMode] = useState(PixyMode.OFF);
 
   // spotify state
