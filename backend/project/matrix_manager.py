@@ -24,8 +24,6 @@ class MatrixManager:
 		self.__matrix.Clear()
 
 	def display_image(self, url):
-		self.__clear()
-		
 		tmp = tempfile.TemporaryFile(mode="wb+")
 		tmp.write(requests.get(url).content)
 		tmp.seek(0)
@@ -33,3 +31,7 @@ class MatrixManager:
 		image.thumbnail((self.__matrix.width, self.__matrix.height), Image.ANTIALIAS)
 
 		self.__matrix.SetImage(image.convert('RGB'))
+
+if __name__ == "__main__":
+	matrix_manager = MatrixManager()
+	
