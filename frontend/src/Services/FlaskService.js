@@ -6,6 +6,15 @@ const api = axios.create({
 
 const FlaskService = {
 
+    startClock: async function() {
+        try {
+            await api.get("/clock");
+            return
+        } catch(error) {
+            throw error
+        }
+    },
+
     startSpotify: async function() {
         try {
             await api.get("/spotify");

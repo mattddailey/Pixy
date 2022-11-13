@@ -34,6 +34,7 @@ export function MainAppBar(props) {
                     indicatorColor="secondary" 
                     textColor="inherit"
                 >
+                    <Tab label="Clock"/>
                     <Tab label="Spotify"/>
                 </Tabs>
                 <Typography 

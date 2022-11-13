@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import {MainAppBar} from './Components/AppBar'
 import {PixyMode} from './Model/PixyMode'
 import {SpotifyTab} from './Pages/SpotifyTab'
+import {ClockTab} from './Pages/ClockTab'
 import FlaskService from './Services/FlaskService'
 
 function App() {
@@ -39,6 +40,9 @@ function App() {
       <Box sx={{ padding: 2 }}>
         {tabIndex === 0 && (
           <SpotifyTab currentMode={currentMode} setCurrentMode={setCurrentMode}></SpotifyTab>
+        )}
+        {tabIndex === 1 && (
+          <ClockTab currentMode={currentMode} setCurrentMode={setCurrentMode}></ClockTab>
         )}
       </Box>
     </Box>
