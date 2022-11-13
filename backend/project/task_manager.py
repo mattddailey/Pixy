@@ -1,5 +1,6 @@
 from enum import Enum
 import logging
+import time
 
 from project import spotify_api, tasks
 
@@ -18,7 +19,9 @@ class TaskManager:
     return 
 
   def start_task(self, type=TaskType):
-    self.revoke()
+    if self.__current_task is not None:
+      time.sleep(3)
+      self.revoke()
 
     if type is TaskType.SPOTIFY:
       self.__start_spotify()
