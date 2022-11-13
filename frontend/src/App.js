@@ -39,10 +39,10 @@ function App() {
       <MainAppBar currentMode={currentMode} setCurrentMode={setCurrentMode} setTabIndex={handleTabChange} tabIndex={tabIndex} ></MainAppBar>
       <Box sx={{ padding: 2 }}>
         {tabIndex === 0 && (
-          <SpotifyTab currentMode={currentMode} setCurrentMode={setCurrentMode}></SpotifyTab>
+          <ClockTab currentMode={currentMode} setCurrentMode={setCurrentMode}></ClockTab>
         )}
         {tabIndex === 1 && (
-          <ClockTab currentMode={currentMode} setCurrentMode={setCurrentMode}></ClockTab>
+          <SpotifyTab currentMode={currentMode} setCurrentMode={setCurrentMode}></SpotifyTab>
         )}
       </Box>
     </Box>
