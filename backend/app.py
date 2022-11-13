@@ -51,6 +51,11 @@ def spotify():
 	task_manager.start_task(type=TaskType.SPOTIFY)
 	return "", 204
 
+@app.route('/clock')
+def clock():
+	task_manager.start_task(type=TaskType.CLOCK)
+	return "", 204
+
 @app.route('/revoke')
 def revoke():
 	task_manager.revoke()

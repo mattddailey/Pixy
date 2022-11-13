@@ -4,6 +4,7 @@ import logging
 from project import spotify_api, tasks
 
 class TaskType(Enum):
+    CLOCK = "Clock"
     SPLASH = "Splash"
     SPOTIFY = "Spotify"
 
@@ -21,6 +22,8 @@ class TaskManager:
 
     if type is TaskType.SPOTIFY:
       self.__start_spotify()
+    elif type is TaskType.CLOCK:
+      self.__start_clock()
 
   def revoke(self):
     if self.__current_task is not None:
@@ -29,6 +32,11 @@ class TaskManager:
       task.abort()
       self.__current_task = None
       self.current_task_type = None
+
+  def __start_clock(self):
+    logging.info("Starting Clock Task")
+    self.__current_task = tasks.display_clock()
+    self.current_task_type = TaskType.CLOCK
 
   def __start_spotify(self):
     logging.info("Starting Spotify Task")
