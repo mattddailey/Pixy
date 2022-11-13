@@ -1,10 +1,18 @@
 import tempfile
 import time
+import enum
 
 from rgbmatrix import graphics, RGBMatrix, RGBMatrixOptions
 
 from PIL import Image
 import requests
+
+FONTS_PATH = "../rpi-rgb-led-matrix/fonts/"
+
+class Fonts(Enum):
+	seven_by_thirteen = FONTS_PATH + "7x13.bdf"
+	nine_by_eighteen = FONTS_PATH + "9x18.bdf"
+	nine_by_eighteen_b = FONTS_PATH + "9x18B.bdf"
 
 class MatrixManager:
 	__rows = 64
