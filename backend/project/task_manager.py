@@ -20,8 +20,8 @@ class TaskManager:
 
   def start_task(self, type=TaskType):
     if self.__current_task is not None:
-      time.sleep(3)
       self.revoke()
+      time.sleep(3)
 
     if type is TaskType.SPOTIFY:
       self.__start_spotify()
