@@ -1,7 +1,7 @@
 import tempfile
 import time
 
-from rgbmatrix import RGBMatrix, RGBMatrixOptions
+from rgbmatrix import graphics, RGBMatrix, RGBMatrixOptions
 
 from PIL import Image
 import requests
@@ -32,6 +32,15 @@ class MatrixManager:
 
 		self.__matrix.SetImage(image.convert('RGB'))
 
+	def draw_text(self):
+		offscreen_canvas = self.__matrix.CreateFrameCanvas()
+		font = graphics.Font()
+		font.LoadFont("../rpi-rgb-led-matrix/fonts/7x13.bdf")
+		textColor = graphics.Color(255, 255, 255)
+		test = graphics.DrawText(offscreen_canvas, font, 10, 10, textColor, "test")
+		print(test)	
+
 if __name__ == "__main__":
 	matrix_manager = MatrixManager()
-	
+	matrix_manager.draw_text()
+	time.sleep(5)
