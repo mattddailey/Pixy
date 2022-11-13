@@ -32,31 +32,15 @@ class MatrixManager:
 
 		self.__matrix.SetImage(image.convert('RGB'))
 
-	def draw_text(self):
+	def draw_text(self, font, x_pos, y_pos, text):
+		self.__clear()
 		offscreen_canvas = self.__matrix.CreateFrameCanvas()
 		font = graphics.Font()
-		font.LoadFont("../rpi-rgb-led-matrix/fonts/7x13.bdf")
+		font.LoadFont("../rpi-rgb-led-matrix/fonts/9x18B.bdf")
 		textColor = graphics.Color(255, 255, 255)
-		test = graphics.DrawText(offscreen_canvas, font, 10, 10, textColor, "test")
-		print(test)	
-	
-	def scroll_test(self):
-		offscreen_canvas = self.matrix.CreateFrameCanvas()
-        font = graphics.Font()
-        font.LoadFont("../rpi-rgb-led-matrix/fonts/7x13.bdf")
-        textColor = graphics.Color(255, 255, 0)
-        pos = offscreen_canvas.width
-        my_text = "test"
-
-        while True:
-            offscreen_canvas.Clear()
-            len = graphics.DrawText(offscreen_canvas, font, pos, 10, textColor, my_text)
-            pos -= 1
-            if (pos + len < 0):
-                pos = offscreen_canvas.width
-
-            time.sleep(0.05)
-            offscreen_canvas = self.matrix.SwapOnVSync(offscreen_canvas)
+		
+		graphics.DrawText(offscreen_canvas, font, x_pos, y_pos, textColor, text))
+		self.__matrix.SwapOnVSync(offscreen_canvas)
 
 if __name__ == "__main__":
 	matrix_manager = MatrixManager()
