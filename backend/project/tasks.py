@@ -1,3 +1,4 @@
+from datetime import datetime
 import time
 import logging
 import requests
@@ -10,6 +11,20 @@ from project.spotify import Spotify
 from project.matrix_manager import MatrixManager
 
 logger = get_task_logger(__name__)
+
+@shared_task(bind=True, base=AbortableTask)
+def display_clock(self):
+	matrix_manager = MatrixManager()
+	while True:
+		if self.is_aborted():
+			return
+		now = datetime.now()
+		readable_time = now.strftime("%I:%M %p")
+		if readable_time[0] == "0":
+			readable_time = readable_time[1:]
+		matrix_manager.display_text()
+		time.sleep(60)
+
 
 @shared_task(bind=True, base=AbortableTask)
 def display_spotify_album_art(self, access_token, refresh_token, token_expire_timestamp, base=AbortableTask):
@@ -32,6 +47,3 @@ def display_spotify_album_art(self, access_token, refresh_token, token_expire_ti
 				url_to_display = image_url
 				matrix_manager.display_image(url_to_display)
 		time.sleep(1)
-
-		
-		
