@@ -22,7 +22,8 @@ def display_clock(self):
 		readable_time = now.strftime("%I:%M %p")
 		if readable_time[0] == "0":
 			readable_time = readable_time[1:]
-		matrix_manager.display_text()
+		logging.info("drawing time: {}".format(readable_time))
+		matrix_manager.draw_text(Fonts.nine_by_eighteen_b.value, 2, 20, readable_time)
 		time.sleep(60)
 
 
