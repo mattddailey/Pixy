@@ -2,6 +2,7 @@ from datetime import datetime
 import time
 import logging
 import requests
+import pytz
 
 from celery import shared_task
 from celery.contrib.abortable import AbortableTask
@@ -18,12 +19,20 @@ def display_clock(self):
 	while True:
 		if self.is_aborted():
 			return
-		now = datetime.now()
-		readable_time = now.strftime("%I:%M %p")
+		timezone = pytz.timezone('America/New_York')
+		now = datetime.now(timezone)
+		readable_time = now.strftime("%I:%M%p")
+		
 		if readable_time[0] == "0":
 			readable_time = readable_time[1:]
+		
+		if (now.hour == 10) or (now.hour == 11) or (now.hour == 12):
+			x_pos = 1
+		else:
+			x_pos = 5
+			
 		logging.info("drawing time: {}".format(readable_time))
-		matrix_manager.draw_text(Fonts.nine_by_eighteen_b.value, 2, 20, readable_time)
+		matrix_manager.draw_text(Fonts.nine_by_eighteen_b.value, x_pos, 37, readable_time)
 		time.sleep(60)
 
 
