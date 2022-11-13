@@ -9,7 +9,7 @@ import requests
 
 FONTS_PATH = "../rpi-rgb-led-matrix/fonts/"
 
-class Fonts(Enum):
+class Fonts(enum.Enum):
 	seven_by_thirteen = FONTS_PATH + "7x13.bdf"
 	nine_by_eighteen = FONTS_PATH + "9x18.bdf"
 	nine_by_eighteen_b = FONTS_PATH + "9x18B.bdf"
@@ -40,17 +40,17 @@ class MatrixManager:
 
 		self.__matrix.SetImage(image.convert('RGB'))
 
-	def draw_text(self, font, x_pos, y_pos, text):
+	def draw_text(self, font_value, x_pos, y_pos, text):
 		self.__clear()
 		offscreen_canvas = self.__matrix.CreateFrameCanvas()
 		font = graphics.Font()
-		font.LoadFont("../rpi-rgb-led-matrix/fonts/9x18B.bdf")
+		font.LoadFont(font_value)
 		textColor = graphics.Color(255, 255, 255)
 		
-		graphics.DrawText(offscreen_canvas, font, x_pos, y_pos, textColor, text))
+		graphics.DrawText(offscreen_canvas, font, x_pos, y_pos, textColor, text)
 		self.__matrix.SwapOnVSync(offscreen_canvas)
 
 if __name__ == "__main__":
 	matrix_manager = MatrixManager()
-	matrix_manager.draw_text()
+	matrix_manager.draw_text(Fonts.nine_by_eighteen_b.value, 2, 20, "test")
 	time.sleep(5)
