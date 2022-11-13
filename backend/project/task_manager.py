@@ -28,7 +28,10 @@ class TaskManager:
   def revoke(self):
     if self.__current_task is not None:
       logging.info("Revoking current task")
-      task = tasks.display_spotify_album_art.AsyncResult(self.__current_task.id)
+      if self.__current_task is TaskType.SPOTIFY:
+        task = tasks.display_spotify_album_art.AsyncResult(self.__current_task.id)
+      else:
+        task = tasks.display_clock.AsyncResult(self.__current_task.id)
       task.abort()
       self.__current_task = None
       self.current_task_type = None
