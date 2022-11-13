@@ -39,7 +39,6 @@ class TaskManager:
   def __start_clock(self):
     logging.info("Starting Clock Task")
     self.__current_task = tasks.display_clock.delay()
-    print("CURRENT TASK: {}".format(self.__current_task))
     self.current_task_type = TaskType.CLOCK
 
   def __start_spotify(self):

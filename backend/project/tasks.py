@@ -16,24 +16,27 @@ logger = get_task_logger(__name__)
 @shared_task(bind=True, base=AbortableTask)
 def display_clock(self):
 	matrix_manager = MatrixManager()
+	sec = 0
 	while True:
 		if self.is_aborted():
 			return
-		timezone = pytz.timezone('America/New_York')
-		now = datetime.now(timezone)
-		readable_time = now.strftime("%I:%M%p")
+		elif sec % 60 == 0:
+			timezone = pytz.timezone('America/New_York')
+			now = datetime.now(timezone)
+			readable_time = now.strftime("%I:%M%p")
 		
-		if readable_time[0] == "0":
-			readable_time = readable_time[1:]
+			if readable_time[0] == "0":
+				readable_time = readable_time[1:]
 		
-		if (now.hour == 10) or (now.hour == 11) or (now.hour == 12):
-			x_pos = 1
-		else:
-			x_pos = 5
+			if (now.hour == 10) or (now.hour == 11) or (now.hour == 12):
+				x_pos = 1
+			else:
+				x_pos = 5
 			
-		logging.info("drawing time: {}".format(readable_time))
-		matrix_manager.draw_text(Fonts.nine_by_eighteen_b.value, x_pos, 37, readable_time)
-		time.sleep(60)
+			logging.info("drawing time: {}".format(readable_time))
+			matrix_manager.draw_text(Fonts.nine_by_eighteen_b.value, x_pos, 37, readable_time)
+		sec += 1
+		time.sleep(1)
 
 
 @shared_task(bind=True, base=AbortableTask)
