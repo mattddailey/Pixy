@@ -8,7 +8,7 @@ from celery.contrib.abortable import AbortableTask
 from celery.utils.log import get_task_logger
 
 from project.spotify import Spotify
-from project.matrix_manager import MatrixManager
+from project.matrix_manager import Fonts, MatrixManager
 
 logger = get_task_logger(__name__)
 
