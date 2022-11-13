@@ -49,8 +49,3 @@ class MatrixManager:
 		
 		graphics.DrawText(offscreen_canvas, font, x_pos, y_pos, textColor, text)
 		self.__matrix.SwapOnVSync(offscreen_canvas)
-
-if __name__ == "__main__":
-	matrix_manager = MatrixManager()
-	matrix_manager.draw_text(Fonts.nine_by_eighteen_b.value, 2, 20, "test")
-	time.sleep(5)

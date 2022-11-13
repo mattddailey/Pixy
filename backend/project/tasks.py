@@ -12,13 +12,12 @@ from project.matrix_manager import Fonts, MatrixManager
 
 logger = get_task_logger(__name__)
 
-# @shared_task(bind=True, base=AbortableTask)
-@shared_task
-def display_clock():
+@shared_task(bind=True, base=AbortableTask)
+def display_clock(self):
 	matrix_manager = MatrixManager()
 	while True:
-		# if self.is_aborted():
-		# 	return
+		if self.is_aborted():
+			return
 		now = datetime.now()
 		readable_time = now.strftime("%I:%M %p")
 		if readable_time[0] == "0":
