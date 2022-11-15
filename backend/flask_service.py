@@ -1,10 +1,12 @@
 import dotenv
+import json
 import os
 
 from flask import redirect, url_for, request, Flask
 from flask_cors import CORS
 import redis
 
+from shared.constants import AUTHORIZATION_CODE_KEY, MODE_KEY
 from shared.spotify import Spotify
 from shared.mode import Mode
 
@@ -34,27 +36,30 @@ def callback():
 	spotify_api.get_access_token()
 	return redirect(REDIRECT_URL)
 
-@app.route('/currentMode')
-def getCurrentMode():
-	current_mode = r.get("mode")
-	return { 'currentMode' : current_mode }
+@app.route('/mode/<mode>', methods=['POST'])
+def set_mode(mode):
+	if not mode in Mode:
+		return "", 400
+	
+	data = build_data_for_mode(mode)
+	is_published = r.publish(MODE_KEY, data)
+	if is_published:
+		return "", 204
+	else:
+		return "", 501
 
+@app.route('/mode', methods=['GET'])
+def get_mode():
+	current_mode = r.get(MODE_KEY)
+	return { 'currentMode' : current_mode }
+	
 @app.route('/isLoggedIn')
-def isLoggedIn():
+def is_logged_in():
 	isLoggedIn = spotify_api.authorization_code is not None
 	return { 'isLoggedIn': str(isLoggedIn) }
 
-@app.route('/spotify')
-def spotify():
-	r.publish('mode', Mode.SPOTIFY.value)
-	return "", 204
-
-@app.route('/clock')
-def clock():
-	r.publish('mode', Mode.CLOCK.value)
-	return "", 204
-
-@app.route('/revoke')
-def revoke():
-	r.publish('mode', Mode.OFF.value)
-	return "", 204
+def build_data_for_mode(mode):
+	data = { MODE_KEY : mode }
+	if mode == Mode.SPOTIFY.value and spotify_api.authorization_code is not None:
+		data[AUTHORIZATION_CODE_KEY] = spotify_api.authorization_code
+	return json.dumps(data)
