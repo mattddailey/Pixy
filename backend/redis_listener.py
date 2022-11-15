@@ -5,25 +5,27 @@ import redis
 
 from shared.mode import Mode
 
+MODE_CHANNEL = "mode"
+UTILITY_CHANNEL = "utility"
+
 class RedisListener:
-    current_mode = None
+    current_mode = Mode.OFF
 
     def __init__(self, redis: redis.Redis):
         self.redis = redis
-        self.current_mode = Mode.OFF
-        self.redis.set("mode", "off")
+        self.redis.set(MODE_CHANNEL, "off")
         self.listen()
 
     def listen(self):
-        logging.info("listening for messages")
+        print("Listening for matrix control messages...")
         pubsub = self.redis.pubsub(ignore_subscribe_messages=True)
-        pubsub.subscribe(["mode", "utility"])
+        pubsub.subscribe([MODE_CHANNEL, UTILITY_CHANNEL])
         while True:
             message = pubsub.get_message()
             if message is not None:
-                if message["channel"] == "mode":
+                if message["channel"] == MODE_CHANNEL:
                     self.handle_mode(message["data"])
-                elif message["channel"] == "utility":
+                elif message["channel"] == UTILITY_CHANNEL:
                     self.handl_utility(message["data"])
             else:
                 self.update_matrix_if_needed()
@@ -44,7 +46,7 @@ class RedisListener:
             return
 
         print("Received request to set mode to: {}".format(received_mode))
-        self.redis.set("mode", received_mode)
+        self.redis.set(MODE_CHANNEL, received_mode)
         self.current_mode = Mode[received_mode.upper()]
         self.update_matrix_if_needed()
 

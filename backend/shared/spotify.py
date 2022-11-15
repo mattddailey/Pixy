@@ -29,11 +29,9 @@ class Spotify:
 
   # -------------------------- LIFECYCLE -------------------------- 
 
-  def __init__(self, access_token=None, refresh_token=None, token_expire_timestamp=None):
+  def __init__(self, authorization_code=None):
     dotenv.load_dotenv()
-    self.access_token = access_token
-    self.refresh_token = refresh_token
-    self.token_expire_timestamp = token_expire_timestamp
+    self.authorization_code = authorization_code
     self.__callback_url = os.getenv('BASE_URL') + ':5000/callback'
     self.__client_id = os.getenv('SPOTIFY_CLIENT_ID')
     self.__client_secret = os.getenv('SPOTIFY_CLIENT_SECRET')
