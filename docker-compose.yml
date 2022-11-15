@@ -1,30 +1,15 @@
 services:
   redis:
     image: redis:bullseye
-  celery:
-    build:
-      dockerfile: python.Dockerfile
-    privileged: true
-    environment:
-      BASE_URL: ${BASE_URL}
-      CELERY_BROKER: redis://redis:6379/0
-      CELERY_RESULT_BACKEND: redis://redis:6379/0
-      SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID}
-      SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET}
-    volumes:
-    - ./backend:/backend
-    command: celery -A app.celery worker --loglevel=info
-    # command: python3 project/matrix_manager.py
-    depends_on:
-      - redis
   flask:
     build:
       dockerfile: python.Dockerfile
     environment:
       BASE_URL: ${BASE_URL}
-      FLASK_APP: app.py
+      FLASK_APP: flask_service.py
       FLASK_ENV: development
       FLASK_DEBUG: true
+      PYTHONUNBUFFERED: 1
       SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID}
       SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET}
     volumes:
@@ -33,7 +18,19 @@ services:
     ports: 
       - 5000:5000
     depends_on:
-      - celery
+      - redis
+  matrix:
+    build:
+        dockerfile: python.Dockerfile
+    environment:
+      PYTHONUNBUFFERED: 1
+      SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID}
+      SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET}
+    volumes:
+    - ./backend:/backend
+    command: python3 redis_listener.py
+    depends_on:
+      - redis
   react:
     build:
       dockerfile: react.Dockerfile
@@ -44,4 +41,3 @@ services:
     command: npm start
     ports: 
     - 3000:3000
-    

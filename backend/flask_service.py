@@ -1,17 +1,17 @@
 import dotenv
 import os
 
-from flask import redirect, url_for, request
+from flask import redirect, url_for, request, Flask
 from flask_cors import CORS
+import redis
 
-from project import create_app, ext_celery, spotify_api, tasks
-from project.task_manager import TaskManager, TaskType
+from shared.spotify import Spotify
+from shared.mode import Mode
 
-app = create_app()
+app = Flask(__name__)
+spotify_api = Spotify()
+r = redis.Redis('redis', 6379, charset="utf-8", decode_responses=True)
 CORS(app)
-
-celery = ext_celery.celery
-task_manager = TaskManager()
 
 dotenv.load_dotenv()
 REDIRECT_URL = os.getenv("BASE_URL") + ":3000"
@@ -36,27 +36,25 @@ def callback():
 
 @app.route('/currentMode')
 def getCurrentMode():
-	if task_manager.current_task_type is not None:
-		return { 'currentMode' :  task_manager.current_task_type.value }
-	else:
-		return { 'currentMode' : 'Off' }
+	current_mode = r.get("mode")
+	return { 'currentMode' : current_mode }
 
 @app.route('/isLoggedIn')
 def isLoggedIn():
-	isLoggedIn = (spotify_api.authorization_code is not None) and (spotify_api.access_token is not None) and (spotify_api.refresh_token is not None)
+	isLoggedIn = spotify_api.authorization_code is not None
 	return { 'isLoggedIn': str(isLoggedIn) }
 
 @app.route('/spotify')
 def spotify():
-	task_manager.start_task(type=TaskType.SPOTIFY)
+	r.publish('mode', Mode.SPOTIFY.value)
 	return "", 204
 
 @app.route('/clock')
 def clock():
-	task_manager.start_task(type=TaskType.CLOCK)
+	r.publish('mode', Mode.CLOCK.value)
 	return "", 204
 
 @app.route('/revoke')
 def revoke():
-	task_manager.revoke()
+	r.publish('mode', Mode.OFF.value)
 	return "", 204

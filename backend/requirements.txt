@@ -1,4 +1,3 @@
-Flask-CeleryExt==0.3.4
 flask_cors
 python-dotenv
 requests

@@ -1,6 +1,6 @@
 export const PixyMode = {
-    CLOCK: "Clock",
-    LANDING: "Landing",
-    OFF: "Off",
-    SPOTIFY: "Spotify"
+    CLOCK: "clock",
+    LANDING: "landing",
+    OFF: "off",
+    SPOTIFY: "spotify"
   }
