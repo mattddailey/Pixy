@@ -50,10 +50,6 @@ class RedisListener:
                 print("Updating clock...")
                 self.renderer.update_clock()
                 self.counter == 0
-        
-        elif self.current_mode == Mode.OFF:
-            print("Turning matrix off...")
-            self.renderer.off()
 
         elif self.current_mode == Mode.SPOTIFY:
             self.renderer.update_spotify_album_if_needed()
@@ -73,7 +69,12 @@ class RedisListener:
         print("Received request to set mode to: {}".format(mode))
         self.redis.set(MODE_KEY, mode)
         self.current_mode = Mode[mode.upper()]
-        self.update_matrix_if_needed()
+        
+        if self.current_mode == Mode.OFF:
+            print("Turning matrix off...")
+            self.renderer.off() 
+        else:
+            self.update_matrix_if_needed()
 
 
     def handl_utility(self, received_utility):
