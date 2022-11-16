@@ -1,7 +1,10 @@
 from datetime import datetime
 from enum import Enum
+import requests
+import tempfile
 
 import pytz
+from PIL import Image
 
 from rgbmatrix import graphics, RGBMatrix, RGBMatrixOptions
 
@@ -15,6 +18,7 @@ class Fonts(Enum):
 
 class Renderer:
     primary_color = graphics.Color(255, 255, 255)
+    spotify_current_image_url = None
 
     def __init__(self, spotify):
         self.spotify = spotify
@@ -28,8 +32,9 @@ class Renderer:
         self.matrix = RGBMatrix(options = options)
 
     def off(self):
+        self.spotify_current_image_url = None
         self.matrix.Clear()
-        return
+
 
     def update_clock(self):
         # create string for current time
@@ -54,5 +59,31 @@ class Renderer:
 
 
     def update_spotify_album_if_needed(self):
-        return
+        # fetch current playing info
+        try:
+            current_playing = self.spotify.get_current_playing()
+            image_url = current_playing['item']['album']['images'][0]['url']
+        except Exception as e: 
+            print("An error occured attempting to get spotify album cover")
+            print(e)
+            return
+        
+        # check if current playing image url matches what is currently being displayed
+        if image_url != self.spotify_current_image_url:
+            print("Updating spotify album cover...")
+            self.spotify_current_image_url = image_url
+            self.__display_image_from_url(image_url)
+
+
+    def __display_image_from_url(self, url):
+        # download image to tempfile
+        tmp = tempfile.TemporaryFile(mode="wb+")
+        tmp.write(requests.get(url).content)
+        tmp.seek(0)
+
+        # create image and set to matrix
+        image = Image.open(tmp)
+        image.thumbnail((self.matrix.width, self.matrix.height), Image.ANTIALIAS)
+        self.matrix.SetImage(image.convert('RGB'))
+
 

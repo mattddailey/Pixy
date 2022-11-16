@@ -22,6 +22,7 @@ services:
   matrix:
     build:
         dockerfile: python.Dockerfile
+    privileged: true
     environment:
       BASE_URL: ${BASE_URL}
       PYTHONUNBUFFERED: 1
