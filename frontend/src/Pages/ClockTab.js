@@ -16,7 +16,7 @@ export function ClockTab(props) {
         <Button 
             disabled={isButtonDisabled}
             onClick={() => {
-                FlaskService.startClock()
+                FlaskService.setMode(PixyMode.CLOCK)
                 .then((_) => {
                   props.setCurrentMode(PixyMode.CLOCK)
                 })

@@ -3,7 +3,7 @@ import time
 
 from redis import Redis
 
-from matrix.matrix import Matrix
+from matrix.renderer import Renderer
 from shared.constants import AUTHORIZATION_CODE_KEY, MODE_KEY, UTILITY_KEY
 from shared.mode import Mode
 from shared.spotify import Spotify
@@ -15,9 +15,9 @@ class RedisListener:
     counter = 0
     current_mode = Mode.OFF
 
-    def __init__(self, matrix: Matrix, redis: Redis, spotify: Spotify):
-        self.matrix = matrix
+    def __init__(self, redis: Redis, renderer: Renderer, spotify: Spotify):
         self.redis = redis
+        self.renderer = renderer
         self.spotify = spotify
         self.redis.set(MODE_KEY, "off")
         self.listen()
@@ -48,15 +48,15 @@ class RedisListener:
         if self.current_mode == Mode.CLOCK:
             if self.counter % 60 == 0:
                 print("Updating clock...")
-                self.matrix.draw_clock()
+                self.renderer.update_clock()
                 self.counter == 0
         
-        elif self.current_mode == Mode.OFF:
-            print("Turning matrix off...")
-            self.matrix.off()
+        # elif self.current_mode == Mode.OFF:
+        #     print("Turning matrix off...")
+        #     self.renderer.off()
 
         elif self.current_mode == Mode.SPOTIFY:
-            self.matrix.draw_spotify()
+            self.renderer.update_spotify_album_if_needed()
             return
 
 
@@ -80,9 +80,8 @@ class RedisListener:
         # TODO: handle utility
         return
 
-
 if __name__ == "__main__":
     redis = Redis('redis', 6379, charset="utf-8", decode_responses=True)
     spotify = Spotify()
-    matrix = Matrix(spotify)
-    redis_listener = RedisListener(matrix, redis, spotify)
+    renderer = Renderer(spotify)
+    redis_listener = RedisListener(redis, renderer, spotify)

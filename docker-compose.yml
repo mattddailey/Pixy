@@ -23,6 +23,7 @@ services:
     build:
         dockerfile: python.Dockerfile
     environment:
+      BASE_URL: ${BASE_URL}
       PYTHONUNBUFFERED: 1
       SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID}
       SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET}

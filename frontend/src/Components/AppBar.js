@@ -17,7 +17,7 @@ export function MainAppBar(props) {
                 color="inherit"
                 sx={{ mr: 2 }}
                 onClick={() => {
-                    FlaskService.revoke()
+                    FlaskService.setMode(PixyMode.OFF)
                     .then((_) => {
                         props.setCurrentMode(PixyMode.OFF)
                     })

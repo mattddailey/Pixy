@@ -27,7 +27,7 @@ function App() {
       console.log(res.isLoggedIn)
       setIsSpotifyAuthorized(res.isLoggedIn === 'true');
     });
-    FlaskService.getCurrentMode()
+    FlaskService.getMode()
     .then((res) => {
       console.log("Current mode: " + res.currentMode)
       setCurrentMode(res.currentMode)

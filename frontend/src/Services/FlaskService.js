@@ -6,36 +6,18 @@ const api = axios.create({
 
 const FlaskService = {
 
-    startClock: async function() {
+    setMode: async function(mode) {
         try {
-            await api.get("/clock");
-            return
-        } catch(error) {
-            throw error
-        }
-    },
-
-    startSpotify: async function() {
-        try {
-            await api.get("/spotify");
-            return
-        } catch(error) {
-            throw error
-        }
-    },
-
-    revoke: async function() {
-        try {
-            await api.get("/revoke");
+            await api.post("/mode/" + mode);
             return
         } catch(error) {
             throw error
         }
     },
     
-    getCurrentMode: async function() {
+    getMode: async function() {
         try {
-            const response = await api.get("/currentMode");
+            const response = await api.get("/mode");
             return response.data
         } catch(error) {
             throw error

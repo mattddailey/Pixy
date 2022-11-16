@@ -16,7 +16,7 @@ export function SpotifyTab(props) {
         <Button 
             disabled={isButtonDisabled}
             onClick={() => {
-                FlaskService.startSpotify()
+                FlaskService.setMode(PixyMode.SPOTIFY)
                 .then((_) => {
                   props.setCurrentMode(PixyMode.SPOTIFY)
                 })
