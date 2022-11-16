@@ -46,6 +46,7 @@ class RedisListener:
 
     def update_matrix_if_needed(self):
         if self.current_mode == Mode.CLOCK:
+            print("counter: {}".format(self.counter))
             if self.counter % 60 == 0:
                 print("Updating clock...")
                 self.renderer.update_clock()
