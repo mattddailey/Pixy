@@ -49,7 +49,7 @@ class RedisListener:
             if self.counter % 60 == 0:
                 print("Updating clock...")
                 self.renderer.update_clock()
-                self.counter == 0
+                self.counter = 0
 
         elif self.current_mode == Mode.SPOTIFY:
             self.renderer.update_spotify_album_if_needed()
