@@ -74,6 +74,7 @@ class RedisListener:
             print("Turning matrix off...")
             self.renderer.off() 
         else:
+            self.counter == 0
             self.update_matrix_if_needed()
 
 
