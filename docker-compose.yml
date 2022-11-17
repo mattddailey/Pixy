@@ -30,7 +30,7 @@ services:
       SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET}
     volumes:
     - ./backend:/backend
-    command: python3 redis_listener.py
+    command: python3 -m redis_listener
     depends_on:
       - redis
   react:

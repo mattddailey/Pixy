@@ -7,6 +7,7 @@ import pytz
 from PIL import Image
 
 from rgbmatrix import graphics, RGBMatrix, RGBMatrixOptions
+from services.spotify_service import SpotifyService
 
 FONTS_PATH = "../../rpi-rgb-led-matrix/fonts/"
 
@@ -20,8 +21,8 @@ class Renderer:
     primary_color = graphics.Color(255, 255, 255)
     spotify_current_image_url = None
 
-    def __init__(self, spotify):
-        self.spotify = spotify
+    def __init__(self, spotify_service: SpotifyService):
+        self.spotify_service = spotify_service
         # Configured Matrix
         #TODO: move to env?
         options = RGBMatrixOptions()
@@ -69,7 +70,7 @@ class Renderer:
     def update_spotify_album_if_needed(self, force=False):
         # fetch current playing info
         try:
-            current_playing = self.spotify.get_current_playing()
+            current_playing = self.spotify_service.get_current_playing()
             image_url = current_playing['item']['album']['images'][0]['url']
         except Exception as e: 
             print("An error occured attempting to get spotify album cover")

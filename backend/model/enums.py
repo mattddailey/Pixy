@@ -8,11 +8,11 @@ class MetaEnum(EnumMeta):
             return False
         return True  
 
-class Mode(Enum, metaclass=MetaEnum):
+class ModeType(Enum, metaclass=MetaEnum):
     CLOCK = "clock"
     OFF = "off"
     SPOTIFY = "spotify"
 
-class Utility(Enum, metaclass=MetaEnum):
+class UtilityType(Enum, metaclass=MetaEnum):
     BRIGHTNESS = "brightness"
     PRIMARY_COLOR = "primary_color"

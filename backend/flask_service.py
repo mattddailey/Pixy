@@ -6,12 +6,13 @@ from flask import redirect, url_for, request, Flask
 from flask_cors import CORS
 import redis
 
-from shared.constants import AUTHORIZATION_CODE_KEY, MODE_KEY
-from shared.spotify import Spotify
-from shared.enum import Mode
+from constants import AUTHORIZATION_CODE_KEY, MODE_KEY
+from model.enums import ModeType
+from model.mode import Mode, Spotify
+from services.spotify_service import SpotifyService
 
 app = Flask(__name__)
-spotify_api = Spotify()
+spotify_api = SpotifyService()
 r = redis.Redis('redis', 6379, charset="utf-8", decode_responses=True)
 CORS(app)
 
@@ -37,7 +38,7 @@ def callback():
 
 @app.route('/mode/<mode>', methods=['POST'])
 def set_mode(mode):
-	if not mode in Mode:
+	if not mode in ModeType:
 		return "", 400
 	
 	data = build_data_for_mode(mode)
@@ -58,7 +59,8 @@ def is_logged_in():
 	return { 'isLoggedIn': str(isLoggedIn) }
 
 def build_data_for_mode(mode):
-	data = { MODE_KEY : mode }
-	if mode == Mode.SPOTIFY.value and spotify_api.authorization_code is not None:
-		data[AUTHORIZATION_CODE_KEY] = spotify_api.authorization_code
-	return json.dumps(data)
+	if mode == ModeType.SPOTIFY.value:
+		data = Spotify(spotify_api.authorization_code)
+	else:
+		data = Mode(mode)
+	return json.dumps(data.__dict__)

@@ -14,7 +14,7 @@ AUTHORIZE_ENDPOINT = '/authorize'
 TOKEN_ENDPOINT = '/api/token'
 CURRENT_PLAYING_ENDPOINT = '/v1/me/player/currently-playing'
 
-class Spotify:
+class SpotifyService:
 
   # env objects
   __callback_url = ''
