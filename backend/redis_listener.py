@@ -44,14 +44,14 @@ class RedisListener:
                 self.counter += 1
 
 
-    def update_matrix_if_needed(self):
+    def update_matrix_if_needed(self, force=False):
         if self.current_mode == Mode.CLOCK:
             if self.counter % 60 == 0:
                 self.renderer.update_clock()
                 self.counter = 0
 
         elif self.current_mode == Mode.SPOTIFY:
-            self.renderer.update_spotify_album_if_needed()
+            self.renderer.update_spotify_album_if_needed(force)
             return
 
 
@@ -103,7 +103,7 @@ class RedisListener:
 
     def __rerender(self):
         self.counter = 0
-        self.update_matrix_if_needed()
+        self.update_matrix_if_needed(True)
 
 if __name__ == "__main__":
     redis = Redis('redis', 6379, charset="utf-8", decode_responses=True)

@@ -40,7 +40,7 @@ class Renderer:
 
     def set_primary_color(self, red, green, blue):
         print("Setting new primary color...")
-        self.primary_color = graphics.Color(red, blue, green)
+        self.primary_color = graphics.Color(red, green, blue)
 
     def update_clock(self):
         print("Updating clock...")
@@ -66,7 +66,7 @@ class Renderer:
         self.matrix.SwapOnVSync(canvas)
 
 
-    def update_spotify_album_if_needed(self):
+    def update_spotify_album_if_needed(self, force=False):
         # fetch current playing info
         try:
             current_playing = self.spotify.get_current_playing()
@@ -77,7 +77,7 @@ class Renderer:
             return
         
         # check if current playing image url matches what is currently being displayed
-        if image_url != self.spotify_current_image_url:
+        if image_url != self.spotify_current_image_url or force == True:
             print("Updating spotify album cover...")
             self.spotify_current_image_url = image_url
             self.__display_image_from_url(image_url)
