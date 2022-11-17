@@ -5,7 +5,7 @@ from redis import Redis
 
 from matrix.renderer import Renderer
 from shared.constants import AUTHORIZATION_CODE_KEY, MODE_KEY, UTILITY_KEY
-from shared.mode import Mode
+from shared.enums import Mode, Utility
 from shared.spotify import Spotify
 
 MODE_KEY = "mode"
@@ -33,7 +33,7 @@ class RedisListener:
                 if message["channel"] == MODE_KEY:
                     self.handle_mode(message["data"])
                 elif message["channel"] == UTILITY_KEY:
-                    self.handl_utility(message["data"])
+                    self.handle_utility(message["data"])
             else:
                 self.update_matrix_if_needed()
                 
@@ -47,7 +47,6 @@ class RedisListener:
     def update_matrix_if_needed(self):
         if self.current_mode == Mode.CLOCK:
             if self.counter % 60 == 0:
-                print("Updating clock...")
                 self.renderer.update_clock()
                 self.counter = 0
 
@@ -62,7 +61,7 @@ class RedisListener:
         if AUTHORIZATION_CODE_KEY in data:
             spotify.authorization_code = data[AUTHORIZATION_CODE_KEY]
 
-        if mode not in [mode.value for mode in Mode]:
+        if mode not in Mode:
             print("Received an unsupported mode")
             return
 
@@ -74,13 +73,37 @@ class RedisListener:
             print("Turning matrix off...")
             self.renderer.off() 
         else:
-            self.counter = 0
-            self.update_matrix_if_needed()
+            self.__rerender()
 
 
-    def handl_utility(self, received_utility):
-        # TODO: handle utility
-        return
+    def handle_utility(self, data):
+        data = json.loads(data)
+        utility = data[UTILITY_KEY]
+        
+        if not utility in Utility:
+            print("Received an unsupported mode")
+            return
+
+        print("Received request to set {} utility".format(utility))
+        
+        if utility == Utility.BRIGHTNESS.value:
+            brightness = data[Utility.BRIGHTNESS.value]
+            renderer.set_brightness(brightness)
+            self.redis.set(Utility.BRIGHTNESS.value, brightness)
+        elif utility == Utility.PRIMARY_COLOR.value:
+            primary_color = {
+                "red" : data["red"],
+                "green" : data["green"],
+                "blue" : data["blue"]
+            }
+            renderer.set_primary_color(primary_color["red"], primary_color["green"], primary_color["blue"])
+            self.redis.set(Utility.PRIMARY_COLOR.value, json.dumps(primary_color))
+            self.__rerender()
+
+
+    def __rerender(self):
+        self.counter = 0
+        self.update_matrix_if_needed()
 
 if __name__ == "__main__":
     redis = Redis('redis', 6379, charset="utf-8", decode_responses=True)

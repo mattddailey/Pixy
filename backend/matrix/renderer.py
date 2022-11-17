@@ -28,15 +28,23 @@ class Renderer:
         options.rows = 64
         options.cols = 64
         options.hardware_mapping = 'adafruit-hat-pwm'
-        options.gpio_slowdown = 3
+        options.gpio_slowdown = 2
         self.matrix = RGBMatrix(options = options)
 
     def off(self):
         self.spotify_current_image_url = None
         self.matrix.Clear()
 
+    def set_brightness(self, brightness):
+        self.matrix.brightness = brightness
+
+    def set_primary_color(self, red, green, blue):
+        print("Setting new primary color...")
+        self.primary_color = graphics.Color(red, blue, green)
 
     def update_clock(self):
+        print("Updating clock...")
+        
         # create string for current time
         timezone = pytz.timezone('America/New_York')
         now = datetime.now(timezone)

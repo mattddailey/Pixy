@@ -8,7 +8,7 @@ import redis
 
 from shared.constants import AUTHORIZATION_CODE_KEY, MODE_KEY
 from shared.spotify import Spotify
-from shared.mode import Mode
+from shared.enum import Mode
 
 app = Flask(__name__)
 spotify_api = Spotify()

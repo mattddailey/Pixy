@@ -13,7 +13,6 @@ class Mode(Enum, metaclass=MetaEnum):
     OFF = "off"
     SPOTIFY = "spotify"
 
-    @classmethod
-    def has_value(cls, value):
-        values = [item.value for item in Mode]
-        return value in values
+class Utility(Enum, metaclass=MetaEnum):
+    BRIGHTNESS = "brightness"
+    PRIMARY_COLOR = "primary_color"
