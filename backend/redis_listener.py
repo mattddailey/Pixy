@@ -61,7 +61,7 @@ class RedisListener:
         mode = self.__unpack_mode(json.loads(data))
 
         if isinstance(mode, Spotify):
-            spotify_service.authorization_code = data[AUTHORIZATION_CODE_KEY]
+            spotify_service.authorization_code = mode.authorization_code
 
         print("Received request to set mode to: {}".format(mode.mode))
         self.redis.set(MODE_KEY, mode.mode)
