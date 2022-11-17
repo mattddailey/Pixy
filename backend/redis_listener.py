@@ -98,7 +98,8 @@ class RedisListener:
             }
             renderer.set_primary_color(primary_color["red"], primary_color["green"], primary_color["blue"])
             self.redis.set(Utility.PRIMARY_COLOR.value, json.dumps(primary_color))
-            self.__rerender()
+            
+        self.__rerender()
 
 
     def __rerender(self):
