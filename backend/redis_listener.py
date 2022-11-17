@@ -87,7 +87,7 @@ class RedisListener:
             renderer.set_brightness(utility.brightness)
             self.redis.set(UtilityType.BRIGHTNESS.value, utility.brightness)
         elif isinstance(utility, PrimaryColor):
-            renderer.set_primary_color(utility)
+            renderer.set_primary_color(utility.red, utility.green, utility.blue)
             self.redis.set(UtilityType.PRIMARY_COLOR.value, utility)
             
         self.__rerender()

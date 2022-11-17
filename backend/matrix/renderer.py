@@ -6,7 +6,6 @@ import tempfile
 import pytz
 from PIL import Image
 
-from model.utility import PrimaryColor
 from rgbmatrix import graphics, RGBMatrix, RGBMatrixOptions
 from services.spotify_service import SpotifyService
 
@@ -41,9 +40,9 @@ class Renderer:
     def set_brightness(self, brightness):
         self.matrix.brightness = brightness
 
-    def set_primary_color(self, primary_color: PrimaryColor):
+    def set_primary_color(self, red, green, blue):
         print("Setting new primary color...")
-        self.primary_color = graphics.Color(primary_color.red, primary_color.green, primary_color.blue)
+        self.primary_color = graphics.Color(red, green, blue)
 
     def update_clock(self):
         print("Updating clock...")
