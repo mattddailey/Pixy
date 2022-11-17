@@ -1,4 +1,4 @@
-from enums import UtilityType
+from model.enums import UtilityType
 
 class Utility:
     def __init__(self, utility: str):
