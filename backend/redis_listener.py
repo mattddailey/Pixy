@@ -7,6 +7,7 @@ from constants import AUTHORIZATION_CODE_KEY, MODE_KEY, UTILITY_KEY
 from matrix.renderer import Renderer
 from model.enums import ModeType, UtilityType
 from model.mode import Mode, Spotify
+from model.utility import Brightness, PrimaryColor
 from services.spotify_service import SpotifyService
 
 MODE_KEY = "mode"
@@ -57,11 +58,9 @@ class RedisListener:
 
 
     def handle_mode(self, data):
-        data = json.loads(data)
-        mode = self.__unpack_mode(data)
+        mode = self.__unpack_mode(json.loads(data))
 
         if isinstance(mode, Spotify):
-            print("got a spotify request")
             spotify_service.authorization_code = data[AUTHORIZATION_CODE_KEY]
 
         print("Received request to set mode to: {}".format(mode.mode))
@@ -76,27 +75,20 @@ class RedisListener:
 
 
     def handle_utility(self, data):
-        data = json.loads(data)
-        utility = data[UTILITY_KEY]
+        utility = self.__unpack_utility(json.loads(data))
         
-        if not utility in UtilityType:
+        if utility is None:
             print("Received an unsupported mode")
             return
 
-        print("Received request to set {} utility".format(utility))
+        print("Received request to set {} utility".format(utility.utility))
         
-        if utility == UtilityType.BRIGHTNESS.value:
-            brightness = data[UtilityType.BRIGHTNESS.value]
-            renderer.set_brightness(brightness)
-            self.redis.set(UtilityType.BRIGHTNESS.value, brightness)
-        elif utility == UtilityType.PRIMARY_COLOR.value:
-            primary_color = {
-                "red" : data["red"],
-                "green" : data["green"],
-                "blue" : data["blue"]
-            }
-            renderer.set_primary_color(primary_color["red"], primary_color["green"], primary_color["blue"])
-            self.redis.set(UtilityType.PRIMARY_COLOR.value, json.dumps(primary_color))
+        if isinstance(utility, Brightness):
+            renderer.set_brightness(utility.brightness)
+            self.redis.set(UtilityType.BRIGHTNESS.value, utility.brightness)
+        elif isinstance(utility, PrimaryColor):
+            renderer.set_primary_color(utility)
+            self.redis.set(UtilityType.PRIMARY_COLOR.value, utility)
             
         self.__rerender()
 
@@ -113,6 +105,14 @@ class RedisListener:
         else:
             mode = Mode("off")
         return mode
+
+    def __unpack_utility(self, data):
+        utility = None
+        if data[UTILITY_KEY] == UtilityType.BRIGHTNESS.value:
+            utility = Brightness(**data)
+        elif data[UTILITY_KEY] == UtilityType.PRIMARY_COLOR.value:
+            utility = PrimaryColor(**data)
+        return utility
 
 
 
