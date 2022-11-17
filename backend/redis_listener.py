@@ -58,19 +58,14 @@ class RedisListener:
 
     def handle_mode(self, data):
         data = json.loads(data)
-        # I LEFT OFF HERE IN REFACTOR
         mode = self.__unpack_mode(data)
-        # Will need a nil check here
-        if AUTHORIZATION_CODE_KEY in data:
+
+        if mode is Spotify:
             spotify_service.authorization_code = data[AUTHORIZATION_CODE_KEY]
 
-        if mode not in ModeType:
-            print("Received an unsupported mode")
-            return
-
-        print("Received request to set mode to: {}".format(mode))
-        self.redis.set(MODE_KEY, mode)
-        self.current_mode = ModeType[mode.upper()]
+        print("Received request to set mode to: {}".format(mode.mode))
+        self.redis.set(MODE_KEY, mode.mode)
+        self.current_mode = ModeType[mode.mode.upper()]
         
         if self.current_mode == ModeType.OFF:
             print("Turning matrix off...")
