@@ -58,7 +58,8 @@ class RedisListener:
 
 
     def handle_mode(self, data):
-        mode = self.__unpack_mode(json.loads(data))
+        mode = Mode(**data)
+        # mode = self.__unpack_mode(json.loads(data))
 
         if isinstance(mode, Spotify):
             spotify_service.authorization_code = mode.authorization_code
@@ -97,14 +98,15 @@ class RedisListener:
         self.counter = 0
         self.update_matrix_if_needed(True)
 
-    def __unpack_mode(self, data):
-        if data[MODE_KEY] == ModeType.SPOTIFY.value:
-            mode = Spotify(**data)
-        elif data[MODE_KEY] == ModeType.CLOCK.value:
-            mode = Mode(**data)
-        else:
-            mode = Mode("off")
-        return mode
+    # def __unpack_mode(self, data):
+    #     mode = Mode(**data)
+    #     if data[MODE_KEY] == ModeType.SPOTIFY.value:
+    #         mode = Spotify(**data)
+    #     elif data[MODE_KEY] == ModeType.CLOCK.value:
+    #         mode = Mode(**data)
+    #     else:
+    #         mode = Mode("off")
+    #     return mode
 
     def __unpack_utility(self, data):
         utility = None
