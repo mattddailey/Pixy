@@ -8,7 +8,7 @@ import redis
 
 from constants import AUTHORIZATION_CODE_KEY, MODE_KEY
 from model.enums import ModeType
-from model.mode import Mode, Spotify
+from model.mode import Mode
 from services.spotify_service import SpotifyService
 
 app = Flask(__name__)
@@ -58,9 +58,11 @@ def is_logged_in():
 	isLoggedIn = spotify_api.authorization_code is not None
 	return { 'isLoggedIn': str(isLoggedIn) }
 
+
 def build_data_for_mode(mode):
+	data = Mode(mode)
+
 	if mode == ModeType.SPOTIFY.value:
-		data = Spotify(spotify_api.authorization_code)
-	else:
-		data = Mode(mode)
+		data.authorization_code = spotify_api.authorization_code
+
 	return json.dumps(data.__dict__)

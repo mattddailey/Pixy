@@ -6,7 +6,7 @@ from redis import Redis
 from constants import AUTHORIZATION_CODE_KEY, MODE_KEY, UTILITY_KEY
 from matrix.renderer import Renderer
 from model.enums import ModeType, UtilityType
-from model.mode import Mode, Spotify
+from model.mode import Mode
 from model.utility import Utility
 from services.spotify_service import SpotifyService
 
@@ -58,9 +58,9 @@ class RedisListener:
 
 
     def handle_mode(self, data):
-        mode = self.__unpack_mode(json.loads(data))
+        mode = Mode(**json.loads(data))
 
-        if isinstance(mode, Spotify):
+        if mode.mode == ModeType.SPOTIFY.value:
             spotify_service.authorization_code = mode.authorization_code
 
         print("Received request to set mode to: {}".format(mode.mode))
@@ -75,7 +75,7 @@ class RedisListener:
 
 
     def handle_utility(self, data):
-        utility = self.__unpack_utility(json.loads(data))
+        utility = Utility(**json.loads(data))
         
         if utility is None:
             print("Received an unsupported mode")
@@ -83,10 +83,10 @@ class RedisListener:
 
         print("Received request to set {} utility".format(utility.utility))
         
-        if isinstance(utility, Brightness):
+        if utility.utility == UtilityType.BRIGHTNESS.value:
             renderer.set_brightness(utility.brightness)
             self.redis.set(UtilityType.BRIGHTNESS.value, utility.brightness)
-        elif isinstance(utility, PrimaryColor):
+        elif utility.utility == UtilityType.PRIMARY_COLOR.value:
             renderer.set_primary_color(utility.red, utility.green, utility.blue)
             self.redis.set(UtilityType.PRIMARY_COLOR.value, json.dumps(utility.__dict__))
             
@@ -96,24 +96,6 @@ class RedisListener:
     def __rerender(self):
         self.counter = 0
         self.update_matrix_if_needed(True)
-
-    def __unpack_mode(self, data):
-        if data[MODE_KEY] == ModeType.SPOTIFY.value:
-            mode = Spotify(**data)
-        elif data[MODE_KEY] == ModeType.CLOCK.value:
-            mode = Mode(**data)
-        else:
-            mode = Mode("off")
-        return mode
-
-    def __unpack_utility(self, data):
-        utility = None
-        if data[UTILITY_KEY] == UtilityType.BRIGHTNESS.value:
-            utility = Brightness(**data)
-        elif data[UTILITY_KEY] == UtilityType.PRIMARY_COLOR.value:
-            utility = PrimaryColor(**data)
-        return utility
-
 
 
 if __name__ == "__main__":
