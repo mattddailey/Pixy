@@ -7,7 +7,7 @@ from constants import AUTHORIZATION_CODE_KEY, MODE_KEY, UTILITY_KEY
 from matrix.renderer import Renderer
 from model.enums import ModeType, UtilityType
 from model.mode import Mode, Spotify
-from model.utility import Brightness, PrimaryColor
+from model.utility import Utility
 from services.spotify_service import SpotifyService
 
 MODE_KEY = "mode"

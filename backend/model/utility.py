@@ -1,17 +1,10 @@
 from model.enums import UtilityType
 
 class Utility:
-    def __init__(self, utility: str):
+    def __init__(self, utility: str, brightness: int = None, red: int = None, green: int = None, blue: int = None,):
         self.utility = utility
-
-class Brightness(Utility):
-    def __init__(self, brightness: int, utility: str = UtilityType.BRIGHTNESS.value):
+        # Optional Properties
         self.brightness = brightness
-        super().__init__(utility)
-
-class PrimaryColor(Utility):
-    def __init__(self, red: int, green: int, blue: int, utility: str = UtilityType.PRIMARY_COLOR.value):
         self.red = red
         self.green = green
         self.blue = blue
-        super().__init__(utility)
