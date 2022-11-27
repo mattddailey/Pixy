@@ -71,7 +71,7 @@ def get_brightness():
 @app.route('/primary_color', methods=['GET'])
 def get_primary_color():
 	primary_color = r.get(UtilityType.PRIMARY_COLOR.value)
-	return json.dumps(primary_color)
+	return json.loads(primary_color)
 	
 @app.route('/isLoggedIn')
 def is_logged_in():
