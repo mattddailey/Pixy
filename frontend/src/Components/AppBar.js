@@ -1,15 +1,30 @@
-import AccountCircle from '@mui/icons-material/AccountCircle';
+import Stack from '@mui/material/Stack';
+import SettingsIcon from '@mui/icons-material/Settings';
 import Typography from '@mui/material/Typography';
 import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton'
+import Menu from '@mui/material/Menu';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Toolbar from '@mui/material/Toolbar'
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import FlaskService from '../Services/FlaskService'
 import {PixyMode} from '../Model/PixyMode'
+import {BrightnessSlider} from './BrightnessSlider'
+import {ColorPicker} from './ColorPicker'
+import { useState } from 'react';
 
 export function MainAppBar(props) {
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleMenu = (event: MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
     return (
         <AppBar position="static">
             <Toolbar variant="dense">
@@ -44,12 +59,35 @@ export function MainAppBar(props) {
                     > 
                     Currently: {props.currentMode} 
                 </Typography>
-                <IconButton
-                    size="large"
-                    color="inherit"
-                >
-                    <AccountCircle />
-                </IconButton>
+                <div>
+                    <IconButton
+                        size="large"
+                        color="inherit"
+                        onClick={handleMenu}
+                    >
+                        <SettingsIcon />
+                    </IconButton>
+                    <Menu
+                        anchorEl={anchorEl}
+                        anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                        }}
+                        keepMounted
+                        transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                        }}
+                        open={Boolean(anchorEl)}
+                        onClose={handleClose}
+                    >
+                        <Stack spacing={2} sx={{ padding: 2, width: 200 }}>
+                            <BrightnessSlider />
+                            <ColorPicker />
+                        </Stack>
+                    </Menu>
+                </div>
+                
             </Toolbar>
         </AppBar>
         );

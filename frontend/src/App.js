@@ -12,9 +12,6 @@ function App() {
   // current mode state
   const [currentMode, setCurrentMode] = useState(PixyMode.OFF);
 
-  // spotify state
-  const [isSpotifyAuthorized, setIsSpotifyAuthorized] = useState(false);
-
   // tab state
   const [tabIndex, setTabIndex] = useState(0);
   const handleTabChange = (_, newTabIndex) => {
@@ -22,15 +19,10 @@ function App() {
   };
 
   useEffect(() => {
-    FlaskService.getIsSpotifyAuthorized()
-    .then((res) => {
-      console.log(res.isLoggedIn)
-      setIsSpotifyAuthorized(res.isLoggedIn === 'true');
-    });
     FlaskService.getMode()
     .then((res) => {
       console.log("Current mode: " + res.currentMode)
-      setCurrentMode(res.currentMode)
+      setCurrentMode(res.curentMode)
     });
   }, []);
 
