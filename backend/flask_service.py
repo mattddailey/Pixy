@@ -6,9 +6,10 @@ from flask import redirect, url_for, request, Flask
 from flask_cors import CORS
 import redis
 
-from constants import AUTHORIZATION_CODE_KEY, MODE_KEY
-from model.enums import ModeType
+from constants import AUTHORIZATION_CODE_KEY, MODE_KEY, UTILITY_KEY
+from model.enums import ModeType, UtilityType
 from model.mode import Mode
+from model.utility import Utility
 from services.spotify_service import SpotifyService
 
 app = Flask(__name__)
@@ -52,12 +53,30 @@ def set_mode(mode):
 def get_mode():
 	current_mode = r.get(MODE_KEY)
 	return { 'currentMode' : current_mode }
+
+@app.route('/utility', methods=['POST'])
+def set_utility():
+	utility = request.json
+	is_published = r.publish(UTILITY_KEY, json.dumps(utility))
+	if is_published:
+		return "", 204
+	else:
+		return "", 501
+
+@app.route('/brightness', methods=['GET'])
+def get_brightness():
+	brightness = r.get(UtilityType.BRIGHTNESS.value)
+	return { UtilityType.BRIGHTNESS.value : brightness }
+
+@app.route('/primary_color', methods=['GET'])
+def get_primary_color():
+	primary_color = r.get(UtilityType.PRIMARY_COLOR.value)
+	return json.loads(primary_color)
 	
 @app.route('/isLoggedIn')
 def is_logged_in():
 	isLoggedIn = spotify_api.authorization_code is not None
 	return { 'isLoggedIn': str(isLoggedIn) }
-
 
 def build_data_for_mode(mode):
 	data = Mode(mode)
