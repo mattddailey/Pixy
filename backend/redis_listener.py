@@ -21,7 +21,7 @@ class RedisListener:
         self.redis = redis
         self.renderer = renderer
         self.spotify_service = spotify_service
-        self.redis.set(MODE_KEY, "off")
+        self.__set_redis_defaults()
         self.listen()
 
 
@@ -96,6 +96,14 @@ class RedisListener:
     def __rerender(self):
         self.counter = 0
         self.update_matrix_if_needed(True)
+
+
+    def __set_redis_defaults(self):
+        utility = Utility(utility=UtilityType.PRIMARY_COLOR.value, red=255, green=255, blue=255)
+        self.redis.set(UtilityType.BRIGHTNESS.value, 100)
+        self.redis.set(UtilityType.PRIMARY_COLOR.value, json.dumps(utility.__dict__))
+        self.redis.set(MODE_KEY, "off")
+
 
 
 if __name__ == "__main__":
