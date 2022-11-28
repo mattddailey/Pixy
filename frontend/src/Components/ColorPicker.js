@@ -23,7 +23,7 @@ export function ColorPicker() {
             <Typography>
             Primary Color:
             </Typography>
-            <RgbaColorPicker color={color} onChange={setColor} onMouseUp={handleMouseUp} touchend={handleMouseUp}/>
+            <RgbaColorPicker color={color} onChange={setColor} onTouchEnd={handleMouseUp}/>
         </Stack>
     )
 }
