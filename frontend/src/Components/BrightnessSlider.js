@@ -27,7 +27,7 @@ export function BrightnessSlider(props) {
             <Typography>
             Brightness: {brightness}%
             </Typography>
-            <Slider value={brightness} onChange={handleChange} onTouchEnd={handleMouseUp}></Slider>
+            <Slider value={brightness} onChange={handleChange} onMouseUp={handleMouseUp} onTouchEnd={handleMouseUp}></Slider>
         </Stack>
     )
 }
