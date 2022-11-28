@@ -1,20 +1,33 @@
 import Slider from '@mui/material/Slider';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import FlaskService from '../Services/FlaskService'
 
 export function BrightnessSlider(props) {
-    const [value, setValue] = useState(30);
+    const [brightness, setBrightness] = useState(30);
 
     const handleChange = (event: Event, newValue: number | number[]) => {
-        setValue(newValue);
+        setBrightness(newValue);
     };
+
+    const handleMouseUp = () => {
+        FlaskService.setBrightness(brightness)
+    };
+
+    useEffect(() => {
+    FlaskService.getBrightness()
+    .then((brightness) => {
+        setBrightness(Number(brightness))
+    });
+    }, []);
+
     return (
         <Stack spacing={2}>
             <Typography>
-            Brightness: {value}%
+            Brightness: {brightness}%
             </Typography>
-            <Slider value={value} onChange={handleChange}></Slider>
+            <Slider value={brightness} onChange={handleChange} onMouseUp={handleMouseUp}></Slider>
         </Stack>
     )
 }

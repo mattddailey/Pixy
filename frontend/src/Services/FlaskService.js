@@ -6,15 +6,15 @@ const api = axios.create({
 
 const FlaskService = {
 
-    setMode: async function(mode) {
+    getBrightness: async function() {
         try {
-            await api.post("/mode/" + mode);
-            return
+            const response = await api.get("/brightness");
+            return response.data.brightness
         } catch(error) {
-            throw error
+            console.log(error)
         }
     },
-    
+
     getMode: async function() {
         try {
             const response = await api.get("/mode");
@@ -23,11 +23,46 @@ const FlaskService = {
             throw error
         }
     },
-    
-    getIsSpotifyAuthorized: async function() {
+
+    getPrimaryColor: async function() {
         try {
-            const response = await api.get("/isLoggedIn");
+            const response = await api.get("/primary_color");
             return response.data
+        } catch(error) {
+            throw error
+        }
+    },
+
+    setBrightness: async function(brightness) {
+        try {
+            const json = { 
+                "utility" : "brightness",
+                "brightness" : brightness
+                }
+            await api.post("/utility", json)
+        } catch(error) {
+            console.log(error)
+        }
+    },
+
+    setPrimaryColor: async function(red, green, blue) {
+        try {
+            const json = { 
+                "utility" : "primary_color",
+                "red" : red,
+                "green" : green,
+                "blue" : blue
+                }
+            console.log(json)
+            await api.post("/utility", json)
+        } catch(error) {
+            console.log(error)
+        }
+    },
+
+    setMode: async function(mode) {
+        try {
+            await api.post("/mode/" + mode);
         } catch(error) {
             throw error
         }
