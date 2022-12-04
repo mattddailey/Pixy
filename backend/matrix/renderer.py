@@ -25,7 +25,6 @@ class Renderer:
     def __init__(self, spotify_service: SpotifyService):
         self.spotify_service = spotify_service
         # Configured Matrix
-        #TODO: move to env?
         options = RGBMatrixOptions()
         options.rows = 64
         options.cols = 64

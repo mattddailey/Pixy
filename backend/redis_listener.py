@@ -49,11 +49,11 @@ class RedisListener:
     def update_matrix_if_needed(self, force=False):
         if self.current_mode == ModeType.CLOCK:
             if self.counter % 60 == 0:
-                self.renderer.update_clock()
+                # self.renderer.update_clock()
                 self.counter = 0
 
         elif self.current_mode == ModeType.SPOTIFY:
-            self.renderer.update_spotify_album_if_needed(force)
+            # self.renderer.update_spotify_album_if_needed(force)
             return
 
 
@@ -69,7 +69,7 @@ class RedisListener:
         
         if self.current_mode == ModeType.OFF:
             print("Turning matrix off...")
-            self.renderer.off() 
+            # self.renderer.off() 
         else:
             self.__rerender()
 
@@ -84,10 +84,10 @@ class RedisListener:
         print("Received request to set {} utility".format(utility.utility))
         
         if utility.utility == UtilityType.BRIGHTNESS.value:
-            renderer.set_brightness(utility.brightness)
+            # renderer.set_brightness(utility.brightness)
             self.redis.set(UtilityType.BRIGHTNESS.value, utility.brightness)
         elif utility.utility == UtilityType.PRIMARY_COLOR.value:
-            renderer.set_primary_color(utility.red, utility.green, utility.blue)
+            # renderer.set_primary_color(utility.red, utility.green, utility.blue)
             self.redis.set(UtilityType.PRIMARY_COLOR.value, json.dumps(utility.__dict__))
             
         self.__rerender()
@@ -95,7 +95,7 @@ class RedisListener:
 
     def __rerender(self):
         self.counter = 0
-        self.update_matrix_if_needed(True)
+        # self.update_matrix_if_needed(True)
 
 
     def __set_redis_defaults(self):
