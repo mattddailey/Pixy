@@ -33,7 +33,7 @@ services:
       WEATHER_APP_ID: ${WEATHER_APP_ID}
     volumes:
     - ./backend:/backend
-    command: python3 -m redis_listener
+    command: python3 matrix/clock_helpers.py
     depends_on:
       - redis
   react:

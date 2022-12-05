@@ -5,11 +5,12 @@ import time
 import pytz
 
 from rgbmatrix import graphics, RGBMatrix, RGBMatrixOptions
-from model.weather import Weather
+# from model.weather import Weather
 
 FONTS_PATH = "../../rpi-rgb-led-matrix/fonts/"
 
 class Fonts(Enum):
+	four_by_six = FONTS_PATH + "4x6.bdf"
 	seven_by_thirteen = FONTS_PATH + "7x13.bdf"
 	nine_by_eighteen = FONTS_PATH + "9x18.bdf"
 	nine_by_eighteen_b = FONTS_PATH + "9x18B.bdf"
@@ -33,8 +34,10 @@ def draw_time(canvas, primary_color: graphics.Color):
     return canvas
 
 
-def draw_weather(canvas, weather: Weather):
-
+def draw_weather(canvas, primary_color: graphics.Color, weather=None):
+	font = graphics.Font()
+    font.LoadFont(Fonts.nine_by_eighteen_b.value)
+	graphics.DrawText(canvas, font, x_pos, 37, primary_color, test 65)
     return canvas
 
 
@@ -47,7 +50,7 @@ if __name__ == "__main__":
     matrix = RGBMatrix(options = options)
     canvas = matrix.CreateFrameCanvas()
     canvas = draw_time(canvas, graphics.Color(255, 255, 255))
-    # canvas = draw_weather(canvas, weather)
+    canvas = draw_weather(canvas, graphics.Color(255, 255, 255))
     matrix.SwapOnVSync(canvas)
     time.sleep(5)
 
