@@ -1,9 +1,10 @@
 from datetime import datetime
 from enum import Enum
+import time
 
 import pytz
 
-from rgbmatrix import graphics
+from rgbmatrix import graphics, RGBMatrix, RGBMatrixOptions
 from model.weather import Weather
 
 FONTS_PATH = "../../rpi-rgb-led-matrix/fonts/"
@@ -35,3 +36,19 @@ def draw_time(canvas, primary_color: graphics.Color):
 def draw_weather(canvas, weather: Weather):
 
     return canvas
+
+
+if __name__ == "__main__":
+    options = RGBMatrixOptions()
+    options.rows = 64
+    options.cols = 64
+    options.hardware_mapping = 'adafruit-hat-pwm'
+    options.gpio_slowdown = 2
+    matrix = RGBMatrix(options = options)
+    canvas = matrix.CreateFrameCanvas()
+    canvas = draw_time(canvas, graphics.Color(255, 255, 255))
+    # canvas = draw_weather(canvas, weather)
+    matrix.SwapOnVSync(canvas)
+    time.sleep(5)
+
+

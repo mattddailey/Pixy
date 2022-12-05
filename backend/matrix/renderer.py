@@ -9,15 +9,6 @@ from rgbmatrix import graphics, RGBMatrix, RGBMatrixOptions
 from services.spotify_service import SpotifyService
 from services.weather_service import WeatherService
 
-
-FONTS_PATH = "../../rpi-rgb-led-matrix/fonts/"
-
-class Fonts(Enum):
-	seven_by_thirteen = FONTS_PATH + "7x13.bdf"
-	nine_by_eighteen = FONTS_PATH + "9x18.bdf"
-	nine_by_eighteen_b = FONTS_PATH + "9x18B.bdf"
-
-
 class Renderer:
     primary_color = graphics.Color(255, 255, 255)
     spotify_current_image_url = None
