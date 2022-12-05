@@ -11,6 +11,8 @@ FONTS_PATH = "../../rpi-rgb-led-matrix/fonts/"
 
 class Fonts(Enum):
 	four_by_six = FONTS_PATH + "4x6.bdf"
+	five_by_eight = FONTS_PATH + "5x8.bdf"
+	six_by_ten = FONTS_PATH + "6x10.bdf"
 	seven_by_thirteen = FONTS_PATH + "7x13.bdf"
 	nine_by_eighteen = FONTS_PATH + "9x18.bdf"
 	nine_by_eighteen_b = FONTS_PATH + "9x18B.bdf"
@@ -35,11 +37,11 @@ def draw_time(canvas, primary_color: graphics.Color):
 
 
 def draw_weather(canvas, primary_color: graphics.Color, weather=None):
-    font = graphics.font()
-    font.LoadFont(Fonts.four_by_six.value)
-    graphics.DrawText(canvas, font, 5, 50, primary_color, "test 65")
+    current_temp_font = graphics.Font()
+    current_temp_font.LoadFont(Fonts.six_by_ten.value)
+    graphics.DrawText(canvas, current_temp_font, 30, 54, primary_color, "65°")
 
-    return canvas
+	return canvas
 
 
 if __name__ == "__main__":
