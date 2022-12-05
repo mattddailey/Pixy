@@ -20,7 +20,7 @@ class WeatherService:
         dotenv.load_dotenv()
         self.latitude = os.getenv('WEATHER_LATITUDE')
         self.longitude = os.getenv('WEATHER_LONGITUDE')
-        self.app_id = os.getenv('WEATHER_AP_ID')
+        self.app_id = os.getenv('WEATHER_APP_ID')
 
     def get_weather(self, force: bool = False):
         if force:
