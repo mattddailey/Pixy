@@ -28,6 +28,9 @@ services:
       PYTHONUNBUFFERED: 1
       SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID}
       SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET}
+      WEATHER_LATITUDE: ${WEATHER_LATITUDE}
+      WEATHER_LONGITUDE: ${WEATHER_LONGITUDE}
+      WEATHER_APP_ID: ${WEATHER_APP_ID}
     volumes:
     - ./backend:/backend
     command: python3 -m redis_listener

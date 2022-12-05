@@ -8,6 +8,7 @@ from PIL import Image
 
 from rgbmatrix import graphics, RGBMatrix, RGBMatrixOptions
 from services.spotify_service import SpotifyService
+from services.weather_service import WeatherService
 
 
 FONTS_PATH = "../../rpi-rgb-led-matrix/fonts/"
@@ -22,8 +23,9 @@ class Renderer:
     primary_color = graphics.Color(255, 255, 255)
     spotify_current_image_url = None
 
-    def __init__(self, spotify_service: SpotifyService):
+    def __init__(self, spotify_service: SpotifyService, weather_service: WeatherService):
         self.spotify_service = spotify_service
+        self.weather_service = weather_service
         # Configured Matrix
         options = RGBMatrixOptions()
         options.rows = 64
@@ -49,9 +51,7 @@ class Renderer:
         # create string for current time
         timezone = pytz.timezone('America/New_York')
         now = datetime.now(timezone)
-        readable_time = now.strftime("%I:%M%p")
-        if readable_time[0] == "0":
-            readable_time = readable_time[1:]
+        readable_time = now.strftime("%-I:%M%p")
 
         # configure x_pos (different when hours number is two digits)
         if (now.hour == 10) or (now.hour == 11) or (now.hour == 12):

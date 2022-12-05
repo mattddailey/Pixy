@@ -9,6 +9,7 @@ from model.enums import ModeType, UtilityType
 from model.mode import Mode
 from model.utility import Utility
 from services.spotify_service import SpotifyService
+from services.weather_service import WeatherService
 
 MODE_KEY = "mode"
 UTILITY_KEY = "utility"
@@ -109,5 +110,6 @@ class RedisListener:
 if __name__ == "__main__":
     redis = Redis('redis', 6379, charset="utf-8", decode_responses=True)
     spotify_service = SpotifyService()
-    renderer = Renderer(spotify_service)
+    weather_service = WeatherService()
+    renderer = Renderer(spotify_service, weather_service)
     redis_listener = RedisListener(redis, renderer, spotify_service)

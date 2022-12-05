@@ -1,29 +1,26 @@
 import json
-import requests
+import os
 import time
 
-# from model.weather import Weather
-class Weather:
-    def __init__(self, main: str, description: str, temp: str, wind: str):
-        self.main = main
-        self.description = description
-        self.temp = temp
-        self.wind = wind
+import dotenv
+import requests
+
+from model.weather import Weather
 
 BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
 
 class WeatherService:
 
+    # configured to refresh after 15 mins
     __last_refresh: int = 0
-    __refresh_after: int = 108000
+    __refresh_after: int = 54000
     __weather: Weather = None
     
     def __init__(self):
-        #TODO: get from environment
-        # dotenv.load_dotenv()
-        self.latitude = "40.27"
-        self.longitude = "-76.89"
-        self.app_id = "1b1c6cdd783ca4d91adb23091383808e"
+        dotenv.load_dotenv()
+        self.latitude = os.getenv('WEATHER_LATITUDE')
+        self.longitude = os.getenv('WEATHER_LONGITUDE')
+        self.app_id = os.getenv('WEATHER_AP_ID')
 
     def get_weather(self, force: bool = False):
         if force:
@@ -38,10 +35,8 @@ class WeatherService:
     def __refresh_weather_data(self):
         url = "{}?lat={}&lon={}&units=imperial&appid={}".format(BASE_URL, self.latitude, self.longitude, self.app_id)
         
-        # make request
         response = requests.get(url)
 
-        # parse response 
         try:
             json_data = json.loads(response.text)
 
