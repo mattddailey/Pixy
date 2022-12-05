@@ -53,7 +53,7 @@ class Renderer:
         # create canvas and draw
         canvas = self.matrix.CreateFrameCanvas()
         canvas = draw_time(canvas, self.primary_color)
-        canvas = draw_weather(weather)
+        canvas = draw_weather(canvas, weather)
         self.matrix.SwapOnVSync(canvas)
 
 
