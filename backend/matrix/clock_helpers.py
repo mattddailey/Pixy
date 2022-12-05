@@ -39,12 +39,12 @@ def draw_time(canvas, primary_color: graphics.Color):
 def draw_weather(canvas, primary_color: graphics.Color, weather=None):
     current_temp_font = graphics.Font()
     current_temp_font.LoadFont(Fonts.six_by_ten.value)
-    graphics.DrawText(canvas, current_temp_font, 19, 37, primary_color, "65°")
+    graphics.DrawText(canvas, current_temp_font, 13, 37, primary_color, "65°")
 
     setpoint_label_font = graphics.Font()
     setpoint_label_font.LoadFont(Fonts.four_by_six.value)
-    graphics.DrawText(canvas, setpoint_label_font, 44, 40, primary_color, "hi")
-    graphics.DrawText(canvas, setpoint_label_font, 44, 54, primary_color, "lo")
+    graphics.DrawText(canvas, setpoint_label_font, 42, 40, primary_color, "hi")
+    graphics.DrawText(canvas, setpoint_label_font, 42, 54, primary_color, "lo")
 
     setpoint_font = graphics.Font()
     setpoint_font.LoadFont(Fonts.five_by_eight.value)
