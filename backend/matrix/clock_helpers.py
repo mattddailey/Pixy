@@ -35,9 +35,10 @@ def draw_time(canvas, primary_color: graphics.Color):
 
 
 def draw_weather(canvas, primary_color: graphics.Color, weather=None):
-	font = graphics.Font()
-    font.LoadFont(Fonts.nine_by_eighteen_b.value)
-	graphics.DrawText(canvas, font, x_pos, 37, primary_color, test 65)
+    font = graphics.font()
+    font.LoadFont(Fonts.four_by_six.value)
+    graphics.DrawText(canvas, font, 5, 50, primary_color, "test 65")
+
     return canvas
 
 
