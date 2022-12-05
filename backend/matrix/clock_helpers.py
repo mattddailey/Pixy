@@ -41,6 +41,11 @@ def draw_weather(canvas, primary_color: graphics.Color, weather=None):
     current_temp_font.LoadFont(Fonts.six_by_ten.value)
     graphics.DrawText(canvas, current_temp_font, 19, 37, primary_color, "65°")
 
+    setpoint_label_font = graphics.Font()
+    setpoint_label_font.LoadFont(Fonts.four_by_six.value)
+    graphics.DrawText(canvas, setpoint_label_font, 44, 40, primary_color, "hi")
+    graphics.DrawText(canvas, setpoint_label_font, 44, 54, primary_color, "lo")
+
     setpoint_font = graphics.Font()
     setpoint_font.LoadFont(Fonts.five_by_eight.value)
     graphics.DrawText(canvas, setpoint_font, 50, 40, primary_color, "70")
