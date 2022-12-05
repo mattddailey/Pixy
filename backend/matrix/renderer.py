@@ -1,11 +1,10 @@
-from datetime import datetime
 from enum import Enum
 import requests
 import tempfile
 
-import pytz
 from PIL import Image
 
+from matrix.clock_helpers import draw_time
 from rgbmatrix import graphics, RGBMatrix, RGBMatrixOptions
 from services.spotify_service import SpotifyService
 from services.weather_service import WeatherService
@@ -47,23 +46,13 @@ class Renderer:
 
     def update_clock(self):
         print("Updating clock...")
-        
-        # create string for current time
-        timezone = pytz.timezone('America/New_York')
-        now = datetime.now(timezone)
-        readable_time = now.strftime("%-I:%M%p")
 
-        # configure x_pos (different when hours number is two digits)
-        if (now.hour == 10) or (now.hour == 11) or (now.hour == 12):
-            x_pos = 1
-        else:
-            x_pos = 5
+        # get weather data
+        weather = self.weather_service.get_weather()
 
         # create canvas and draw
         canvas = self.matrix.CreateFrameCanvas()
-        font = graphics.Font()
-        font.LoadFont(Fonts.nine_by_eighteen_b.value)
-        graphics.DrawText(canvas, font, x_pos, 37, self.primary_color, readable_time)
+        canvas = draw_time(canvas, self.primary_color)
         self.matrix.SwapOnVSync(canvas)
 
 
