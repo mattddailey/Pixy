@@ -33,8 +33,10 @@ class WeatherService:
         return self.__weather
 
     def __refresh_weather_data(self):
-        url = "{}?lat={}&lon={}&units=imperial&appid={}".format(BASE_URL, self.latitude, self.longitude, self.app_id)
         
+        url = "{}?lat={}&lon={}&units=imperial&appid={}".format(BASE_URL, self.latitude, self.longitude, self.app_id)
+        print("URL: {}".format(url))
+
         response = requests.get(url)
 
         try:
@@ -45,11 +47,12 @@ class WeatherService:
             description = weather["description"]
             temp = json_data["main"]["temp"]
             wind = json_data["wind"]["speed"]
-        except:
-            print("Error parsing weather response data. Returning...")
-            return
-        finally:
+
             self.__weather = Weather(main, description, temp, wind)
             self.__last_refresh = time.time()
             print("New weather data saved: {}".format(self.__weather.__dict__))
             return self.__weather
+        except:
+            print("Error parsing weather response data. Returning...")
+            return
+            

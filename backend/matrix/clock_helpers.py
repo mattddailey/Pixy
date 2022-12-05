@@ -4,6 +4,7 @@ from enum import Enum
 import pytz
 
 from rgbmatrix import graphics
+from model.weather import Weather
 
 FONTS_PATH = "../../rpi-rgb-led-matrix/fonts/"
 
@@ -28,4 +29,9 @@ def draw_time(canvas, primary_color: graphics.Color):
     font.LoadFont(Fonts.nine_by_eighteen_b.value)
     graphics.DrawText(canvas, font, x_pos, 37, primary_color, readable_time)
     
+    return canvas
+
+
+def draw_weather(canvas, weather: Weather):
+
     return canvas

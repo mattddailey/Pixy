@@ -4,7 +4,7 @@ import tempfile
 
 from PIL import Image
 
-from matrix.clock_helpers import draw_time
+from matrix.clock_helpers import draw_time, draw_weather
 from rgbmatrix import graphics, RGBMatrix, RGBMatrixOptions
 from services.spotify_service import SpotifyService
 from services.weather_service import WeatherService
@@ -53,6 +53,7 @@ class Renderer:
         # create canvas and draw
         canvas = self.matrix.CreateFrameCanvas()
         canvas = draw_time(canvas, self.primary_color)
+        canvas = draw_weather(weather)
         self.matrix.SwapOnVSync(canvas)
 
 
