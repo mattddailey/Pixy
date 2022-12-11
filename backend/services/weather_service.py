@@ -44,11 +44,10 @@ class WeatherService:
 
             weather = json_data["weather"][0]
             main = weather["main"]
-            description = weather["description"]
             temp = json_data["main"]["temp"]
             wind = json_data["wind"]["speed"]
 
-            self.__weather = Weather(main, description, temp, wind)
+            self.__weather = Weather(main, temp, wind)
             self.__last_refresh = time.time()
             print("New weather data saved: {}".format(self.__weather.__dict__))
             return self.__weather
